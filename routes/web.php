@@ -24,6 +24,17 @@ use App\Http\Controllers\Packager\PesananController;
 */
 
 Route::get('/', function () {
+    if (Auth::check()) {
+        $user = Auth::user();
+        if ($user->role === 'petani') {
+            return redirect()->route('petani.dashboard');
+        } elseif ($user->role === 'rice_mill') {
+            return redirect()->route('ricemill.dashboard');
+        } elseif ($user->role === 'packager') {
+            return redirect()->route('packager.dashboard');
+        }
+        return redirect()->route('home');
+    }
     return redirect()->route('login');
 });
 
@@ -32,7 +43,7 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 // ── Petani Routes ──────────────────────────────────────────────────────────
-Route::middleware(['auth'])->prefix('petani')->name('petani.')->group(function () {
+Route::middleware(['auth', 'role:petani'])->prefix('petani')->name('petani.')->group(function () {
     Route::get('/dashboard', [PetaniDashboard::class, 'index'])->name('dashboard');
     Route::resource('lahan',   ProfilLahanController::class);
     Route::resource('panen',   RiwayatPanenController::class);
@@ -40,37 +51,21 @@ Route::middleware(['auth'])->prefix('petani')->name('petani.')->group(function (
 });
 
 // ── Rice Mill Routes ───────────────────────────────────────────────────────
-Route::middleware(['auth'])->prefix('ricemill')->name('ricemill.')->group(function () {
+Route::middleware(['auth', 'role:rice_mill'])->prefix('ricemill')->name('ricemill.')->group(function () {
     Route::get('/dashboard', [RiceMillDashboard::class, 'index'])->name('dashboard');
 
-    // Penerimaan Gabah
-    Route::get('/penerimaan-gabah',            [PenerimaanGabahController::class, 'index'])->name('penerimaan-gabah.index');
-    Route::get('/penerimaan-gabah/create',     [PenerimaanGabahController::class, 'create'])->name('penerimaan-gabah.create');
-
-    // Operasional Penggilingan
-    Route::get('/operasional',                 [OperasionalController::class, 'index'])->name('operasional.index');
-
-    // Riwayat Produksi
-    Route::get('/produksi',                    [ProduksiController::class, 'index'])->name('produksi.index');
-
-    // Pengiriman Beras ke Packager
-    Route::get('/pengiriman',                  [PengirimanController::class, 'index'])->name('pengiriman.index');
-
-    // Keuangan
-    Route::get('/keuangan',                    [KeuanganController::class, 'index'])->name('keuangan.index');
+    Route::resource('penerimaan-gabah', PenerimaanGabahController::class);
+    Route::resource('operasional',      OperasionalController::class);
+    Route::resource('produksi',         ProduksiController::class)->except(['edit', 'update']);
+    Route::resource('pengiriman',       PengirimanController::class);
+    Route::resource('keuangan',         KeuanganController::class)->except(['show', 'edit', 'update']);
 });
 
 // ── Packager Routes ────────────────────────────────────────────────────────
-Route::middleware(['auth'])->prefix('packager')->name('packager.')->group(function () {
+Route::middleware(['auth', 'role:packager'])->prefix('packager')->name('packager.')->group(function () {
     Route::get('/dashboard', [PackagerDashboard::class, 'index'])->name('dashboard');
 
-    // Penerimaan Beras Putih
-    Route::get('/penerimaan-beras',            [PenerimaanBerasController::class, 'index'])->name('penerimaan-beras.index');
-    Route::get('/penerimaan-beras/create',     [PenerimaanBerasController::class, 'create'])->name('penerimaan-beras.create');
-
-    // Hasil Pengemasan
-    Route::get('/pengemasan',                  [PengemasanController::class, 'index'])->name('pengemasan.index');
-
-    // Pesanan Masuk
-    Route::get('/pesanan',                     [PesananController::class, 'index'])->name('pesanan.index');
+    Route::resource('penerimaan-beras', PenerimaanBerasController::class);
+    Route::resource('pengemasan',      PengemasanController::class)->except(['edit', 'update']);
+    Route::resource('pesanan',         PesananController::class);
 });

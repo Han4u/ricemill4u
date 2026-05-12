@@ -13,8 +13,8 @@
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <!-- Iconify (Heroicons) -->
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
 
     <style>
         :root {
@@ -138,7 +138,7 @@
             font-weight: 500;
         }
 
-        .nav-link i { width: 18px; height: 18px; flex-shrink: 0; }
+        .nav-link .iconify { width: 20px; height: 20px; flex-shrink: 0; }
 
         .sidebar-footer {
             padding: 16px 12px;
@@ -319,7 +319,7 @@
 
         .badge-success-custom  { background:#e8f5ee; color:#1a5c38; }
         .badge-warning-custom  { background:#fef6e0; color:#a0720f; }
-        .badge-info-custom     { background:#e0f0ff; color:#1a5b8f; }
+        .badge-info-custom     { background:#e8f5e9; color:#2e7d32; }
 
         /* ===== FORM ===== */
         .form-label-custom {
@@ -405,23 +405,23 @@
         <div class="nav-section-label">Utama</div>
         <a href="{{ route('petani.dashboard') }}"
            class="nav-link {{ request()->routeIs('petani.dashboard') ? 'active' : '' }}">
-            <i data-lucide="layout-dashboard"></i> Dashboard
+            <span class="iconify" data-icon="heroicons:squares-2x2"></span> Dashboard
         </a>
 
         <div class="nav-section-label">Manajemen Lahan</div>
         <a href="{{ route('petani.lahan.index') }}"
            class="nav-link {{ request()->routeIs('petani.lahan.*') ? 'active' : '' }}">
-            <i data-lucide="map"></i> Profil Lahan
+            <span class="iconify" data-icon="heroicons:map"></span> Profil Lahan
         </a>
 
         <div class="nav-section-label">Panen & Setoran</div>
         <a href="{{ route('petani.panen.index') }}"
            class="nav-link {{ request()->routeIs('petani.panen.*') ? 'active' : '' }}">
-            <i data-lucide="wheat"></i> Riwayat Panen
+            <span class="iconify" data-icon="heroicons:hand-raised"></span> Riwayat Panen
         </a>
         <a href="{{ route('petani.setoran.index') }}"
            class="nav-link {{ request()->routeIs('petani.setoran.*') ? 'active' : '' }}">
-            <i data-lucide="package"></i> Setoran Penggilingan
+            <span class="iconify" data-icon="heroicons:archive-box"></span> Setoran Penggilingan
         </a>
     </nav>
 
@@ -429,7 +429,7 @@
         <form action="{{ route('logout') }}" method="POST">
             @csrf
             <button type="submit" class="nav-link w-100" style="background:none;border:none;cursor:pointer;text-align:left;">
-                <i data-lucide="log-out"></i> Keluar
+                <span class="iconify" data-icon="heroicons:arrow-left-on-rectangle"></span> Keluar
             </button>
         </form>
     </div>
@@ -450,14 +450,14 @@
     <div class="content-area">
         @if(session('success'))
         <div class="alert-clean alert-success-clean mb-4">
-            <i data-lucide="check-circle" style="width:18px;height:18px;"></i>
+            <span class="iconify" data-icon="heroicons:check-circle" style="width:20px;height:20px;"></span>
             {{ session('success') }}
         </div>
         @endif
 
         @if(session('error'))
         <div class="alert-clean alert-danger-clean mb-4">
-            <i data-lucide="x-circle" style="width:18px;height:18px;"></i>
+            <span class="iconify" data-icon="heroicons:x-circle" style="width:20px;height:20px;"></span>
             {{ session('error') }}
         </div>
         @endif
@@ -467,7 +467,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>lucide.createIcons();</script>
+<script></script>
 @stack('scripts')
 </body>
 </html>

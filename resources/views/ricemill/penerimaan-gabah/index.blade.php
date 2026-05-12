@@ -6,7 +6,7 @@
 
 @section('topbar-actions')
 <a href="{{ route('ricemill.penerimaan-gabah.create') }}" class="btn-primary-custom">
-    <i data-lucide="plus-circle"></i> Tambah Penerimaan
+    <span class="iconify" data-icon="heroicons:plus-circle"></span> Tambah Penerimaan
 </a>
 @endsection
 
@@ -15,8 +15,8 @@
     <div class="card-header-clean">
         <h5>Daftar Penerimaan Gabah</h5>
         <div class="d-flex gap-2">
-            <button class="btn-outline-custom btn-sm"><i data-lucide="filter"></i> Filter</button>
-            <button class="btn-outline-custom btn-sm"><i data-lucide="download"></i> Export</button>
+            <button class="btn-outline-custom btn-sm"><span class="iconify" data-icon="heroicons:funnel"></span> Filter</button>
+            <button class="btn-outline-custom btn-sm"><span class="iconify" data-icon="heroicons:arrow-down-tray"></span> Export</button>
         </div>
     </div>
     <div class="table-responsive">
@@ -38,25 +38,31 @@
                     <td>{{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}</td>
                     <td class="fw-medium">#TRX-{{ $item->id }}</td>
                     <td>{{ $item->nama_petani ?? 'Umum' }}</td>
-                    <td>{{ number_format($item->berat_gabah, 0, ',', '.') }} Kg</td>
-                    <td>{{ $item->jenis_gabah }}</td>
+                    <td>{{ number_format($item->jumlah_gabah, 0, ',', '.') }} Kg</td>
+                    <td>{{ ucfirst($item->kualitas_gabah) }}</td>
                     <td>
-                        <span class="badge-custom {{ $item->status == 'selesai' ? 'badge-success-custom' : 'badge-warning-custom' }}">
+                        <span class="badge-custom {{ $item->status == 'selesai' ? 'badge-success-custom' : ($item->status == 'diproses' ? 'badge-info-custom' : 'badge-warning-custom') }}">
                             {{ ucfirst($item->status) }}
                         </span>
                     </td>
                     <td>
                         <div class="d-flex gap-2">
-                            <a href="#" class="btn-outline-custom btn-sm" title="Detail">
-                                <i data-lucide="eye" style="width:14px;height:14px;"></i>
+                            <a href="{{ route('ricemill.penerimaan-gabah.edit', $item) }}" class="btn-outline-custom btn-sm" title="Edit">
+                                <span class="iconify" data-icon="heroicons:pencil" style="width:14px;height:14px;"></span>
                             </a>
+                            <form action="{{ route('ricemill.penerimaan-gabah.destroy', $item) }}" method="POST" onsubmit="return confirm('Hapus data ini?')">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="btn-outline-custom btn-sm text-danger" style="border-color:#f5b8b8;">
+                                    <span class="iconify" data-icon="heroicons:trash" style="width:14px;height:14px;"></span>
+                                </button>
+                            </form>
                         </div>
                     </td>
                 </tr>
                 @empty
                 <tr>
                     <td colspan="7" class="text-center py-5 text-muted">
-                        <i data-lucide="inbox" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></i>
+                        <span class="iconify" data-icon="heroicons:inbox-stack" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></span>
                         <p>Belum ada data penerimaan gabah.</p>
                     </td>
                 </tr>

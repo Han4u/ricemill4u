@@ -6,7 +6,7 @@
 
 @section('topbar-actions')
     <a href="{{ route('packager.penerimaan-beras.create') }}" class="btn-primary-custom">
-        <i data-lucide="plus" style="width:16px;height:16px;"></i>
+        <span class="iconify" data-icon="heroicons:plus" style="width:16px;height:16px;"></span>
         Terima Beras
     </a>
 @endsection
@@ -17,55 +17,55 @@
 <div class="row g-3 mb-4">
     <div class="col-sm-6 col-lg-3">
         <div class="stat-card">
-            <div class="stat-icon" style="background:#f0e8ff;">
-                <i data-lucide="inbox" style="color:#4f2d87;width:22px;height:22px;"></i>
+            <div class="stat-icon" style="background:#e8f5ee;">
+                <span class="iconify" data-icon="heroicons:inbox-stack" style="color:#1a5c38;width:22px;height:22px;"></span>
             </div>
-            <div class="stat-value">{{ $stats['total_penerimaan'] }}</div>
-            <div class="stat-label">Penerimaan Beras</div>
+            <div class="stat-value">{{ number_format($stats['total_terima_kg'], 0, ',', '.') }} Kg</div>
+            <div class="stat-label">Beras Diterima (Bulan Ini)</div>
             <div class="stat-trend neutral">
-                <i data-lucide="calendar" style="width:13px;height:13px;"></i>
-                Bulan ini
+                <span class="iconify" data-icon="heroicons:calendar" style="width:13px;height:13px;"></span>
+                Update terbaru
             </div>
         </div>
     </div>
     <div class="col-sm-6 col-lg-3">
         <div class="stat-card">
             <div class="stat-icon" style="background:#e8f5ee;">
-                <i data-lucide="package-2" style="color:#1a5c38;width:22px;height:22px;"></i>
+                <span class="iconify" data-icon="heroicons:cube" style="color:#1a5c38;width:22px;height:22px;"></span>
             </div>
-            <div class="stat-value">{{ number_format($stats['total_kemasan'], 0, ',', '.') }}</div>
-            <div class="stat-label">Total Kemasan Diproduksi</div>
+            <div class="stat-value">{{ number_format($stats['total_kemas_pack'], 0, ',', '.') }} Pack</div>
+            <div class="stat-label">Produksi Kemasan</div>
             <div class="stat-trend up">
-                <i data-lucide="trending-up" style="width:13px;height:13px;"></i>
-                Efisiensi {{ $stats['efisiensi'] }}%
+                <span class="iconify" data-icon="heroicons:arrow-trending-up" style="width:13px;height:13px;"></span>
+                Siap didistribusi
             </div>
         </div>
     </div>
     <div class="col-sm-6 col-lg-3">
         <div class="stat-card">
             <div class="stat-icon" style="background:#fff8e0;">
-                <i data-lucide="shopping-cart" style="color:#a0720f;width:22px;height:22px;"></i>
+                <span class="iconify" data-icon="heroicons:shopping-cart" style="color:#a0720f;width:22px;height:22px;"></span>
             </div>
-            <div class="stat-value">{{ $stats['total_pesanan'] }}</div>
-            <div class="stat-label">Pesanan Masuk</div>
+            <div class="stat-value">{{ $stats['pesanan_baru'] }}</div>
+            <div class="stat-label">Pesanan Menunggu</div>
             <div class="stat-trend neutral">
-                <i data-lucide="clock" style="width:13px;height:13px;"></i>
-                {{ $stats['pesanan_pending'] }} belum diproses
+                <span class="iconify" data-icon="heroicons:clock" style="width:13px;height:13px;"></span>
+                Perlu diproses
             </div>
         </div>
     </div>
     <div class="col-sm-6 col-lg-3">
         <div class="stat-card">
-            <div class="stat-icon" style="background:#fde8ff;">
-                <i data-lucide="bar-chart-2" style="color:#7b1fa2;width:22px;height:22px;"></i>
+            <div class="stat-icon" style="background:#e8f5e9;">
+                <span class="iconify" data-icon="heroicons:presentation-chart-bar" style="color:#2e7d32;width:22px;height:22px;"></span>
             </div>
             <div class="stat-value" style="font-size:1.25rem;">
-                Rp {{ number_format($stats['omzet_bulan'] ?? 0, 0, ',', '.') }}
+                Rp {{ number_format($stats['total_penjualan'], 0, ',', '.') }}
             </div>
-            <div class="stat-label">Omzet Bulan Ini</div>
+            <div class="stat-label">Omzet (Bulan Ini)</div>
             <div class="stat-trend up">
-                <i data-lucide="arrow-up" style="width:13px;height:13px;"></i>
-                Dari {{ $stats['total_pesanan'] }} pesanan
+                <span class="iconify" data-icon="heroicons:arrow-up" style="width:13px;height:13px;"></span>
+                Total penjualan
             </div>
         </div>
     </div>
@@ -148,33 +148,15 @@
                         Distribusi Jenis Kemasan
                     </div>
                     <div class="d-flex flex-column gap-2">
-                        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#f8f6fd;border-radius:8px;border:1px solid var(--border);">
-                            <span style="font-size:.85rem;">Kemasan 5 kg</span>
-                            <strong style="color:#4f2d87;">{{ $stats['kemasan_5kg'] ?? 0 }}</strong>
+                        @foreach($stats['pie_labels'] as $index => $label)
+                        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#f0fdf4;border-radius:8px;border:1px solid var(--border);">
+                            <span style="font-size:.85rem;">{{ $label }}</span>
+                            <strong style="color:#1a5c38;">{{ $stats['pie_values'][$index] }}</strong>
                         </div>
-                        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#f8f6fd;border-radius:8px;border:1px solid var(--border);">
-                            <span style="font-size:.85rem;">Kemasan 10 kg</span>
-                            <strong style="color:#4f2d87;">{{ $stats['kemasan_10kg'] ?? 0 }}</strong>
-                        </div>
-                        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#f8f6fd;border-radius:8px;border:1px solid var(--border);">
-                            <span style="font-size:.85rem;">Kemasan 25 kg</span>
-                            <strong style="color:#4f2d87;">{{ $stats['kemasan_25kg'] ?? 0 }}</strong>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Kualitas -->
-                <div style="background:#f8f6fd;border-radius:12px;padding:16px;border:1px solid var(--border);">
-                    <div style="font-size:.78rem;color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">
-                        Kualitas Kemasan
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span style="font-size:.85rem;">Layak Jual</span>
-                        <span class="badge-custom badge-success-custom">{{ $stats['layak_jual'] ?? 0 }}</span>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span style="font-size:.85rem;">Reject</span>
-                        <span class="badge-custom badge-danger-custom">{{ $stats['reject'] ?? 0 }}</span>
+                        @endforeach
+                        @if(empty($stats['pie_labels']))
+                            <div class="text-center py-3 text-muted" style="font-size:.8rem;">Belum ada data distribusi.</div>
+                        @endif
                     </div>
                 </div>
             </div>

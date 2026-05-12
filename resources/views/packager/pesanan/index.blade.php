@@ -4,6 +4,12 @@
 @section('page-title', 'Pesanan Masuk')
 @section('breadcrumb', 'Dashboard / Pesanan')
 
+@section('topbar-actions')
+<a href="{{ route('packager.pesanan.create') }}" class="btn-primary-custom">
+    <span class="iconify" data-icon="heroicons:plus-circle"></span> Input Pesanan Manual
+</a>
+@endsection
+
 @section('content')
 <div class="card">
     <div class="card-header-clean">
@@ -25,28 +31,29 @@
             <tbody>
                 @forelse($pesanan as $item)
                 <tr>
-                    <td>{{ \Carbon\Carbon::parse($item->tanggal_pesanan)->format('d M Y') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}</td>
                     <td class="fw-medium">#ORD-{{ $item->id }}</td>
                     <td>{{ $item->nama_pelanggan }}</td>
-                    <td>{{ $item->produk }} ({{ $item->jumlah }} {{ $item->satuan ?? 'Kg' }})</td>
+                    <td>{{ $item->jenis_produk }} ({{ $item->jumlah }} Pcs)</td>
                     <td class="fw-bold">Rp {{ number_format($item->total_harga, 0, ',', '.') }}</td>
                     <td>
-                        @if($item->status == 'selesai')
-                            <span class="badge-custom badge-success-custom">Selesai</span>
-                        @elseif($item->status == 'proses')
-                            <span class="badge-custom badge-info-custom">Proses</span>
-                        @else
-                            <span class="badge-custom badge-warning-custom">Pending</span>
-                        @endif
+                        <span class="badge-custom {{ $item->status == 'selesai' ? 'badge-success-custom' : ($item->status == 'dibatalkan' ? 'badge-danger-custom' : 'badge-warning-custom') }}">
+                            {{ ucfirst($item->status) }}
+                        </span>
                     </td>
                     <td>
-                        <button class="btn-outline-custom btn-sm" title="Proses"><i data-lucide="check-circle" style="width:14px;height:14px;"></i></button>
+                        <form action="{{ route('packager.pesanan.destroy', $item) }}" method="POST" onsubmit="return confirm('Hapus data ini?')">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="btn-outline-custom btn-sm text-danger" style="border-color:#f5b8b8;">
+                                <span class="iconify" data-icon="heroicons:trash" style="width:14px;height:14px;"></span>
+                            </button>
+                        </form>
                     </td>
                 </tr>
                 @empty
                 <tr>
                     <td colspan="7" class="text-center py-5 text-muted">
-                        <i data-lucide="shopping-cart" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></i>
+                        <span class="iconify" data-icon="heroicons:shopping-cart" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></span>
                         <p>Belum ada pesanan masuk.</p>
                     </td>
                 </tr>

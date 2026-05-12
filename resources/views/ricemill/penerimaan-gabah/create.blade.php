@@ -12,7 +12,7 @@
                 <h5>Formulir Penerimaan Gabah Baru</h5>
             </div>
             <div class="card-body p-4">
-                <form action="#" method="POST">
+                <form action="{{ route('ricemill.penerimaan-gabah.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row mb-3">
                         <div class="col-md-6">
@@ -27,19 +27,40 @@
 
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label class="form-label-custom">Berat Gabah (Kg)</label>
-                            <input type="number" class="form-control-custom" name="berat_gabah" placeholder="0" required>
+                            <label class="form-label-custom">Asal Lahan</label>
+                            <input type="text" class="form-control-custom" name="asal_lahan" placeholder="Contoh: Desa Karawang">
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label-custom">Jenis Gabah</label>
-                            <select class="form-select-custom" name="jenis_gabah" required>
-                                <option value="">Pilih Jenis...</option>
-                                <option value="IR64">IR64</option>
-                                <option value="Ciherang">Ciherang</option>
-                                <option value="Inpari">Inpari</option>
-                                <option value="Ketan">Ketan</option>
+                            <label class="form-label-custom">Berat Gabah (Kg)</label>
+                            <input type="number" step="0.01" class="form-control-custom" name="jumlah_gabah" placeholder="0" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label-custom">Kualitas Gabah</label>
+                            <select class="form-select-custom" name="kualitas_gabah" required>
+                                <option value="">Pilih Kualitas...</option>
+                                <option value="kering">Kering</option>
+                                <option value="basah">Basah</option>
+                                <option value="grade_a">Grade A</option>
+                                <option value="grade_b">Grade B</option>
                             </select>
                         </div>
+                        <div class="col-md-6">
+                            <label class="form-label-custom">Status</label>
+                            <select class="form-select-custom" name="status" required>
+                                <option value="menunggu">Menunggu</option>
+                                <option value="diterima">Diterima</option>
+                                <option value="diproses">Diproses</option>
+                                <option value="selesai">Selesai</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label-custom">Bukti Penerimaan (Foto/Nota)</label>
+                        <input type="file" class="form-control-custom" name="bukti_foto" accept="image/*">
                     </div>
 
                     <div class="mb-4">
@@ -48,8 +69,12 @@
                     </div>
 
                     <div class="d-flex gap-2 justify-content-end">
-                        <a href="{{ route('ricemill.penerimaan-gabah.index') }}" class="btn-outline-custom">Batal</a>
-                        <button type="submit" class="btn-primary-custom">Simpan Data</button>
+                        <a href="{{ route('ricemill.penerimaan-gabah.index') }}" class="btn-outline-custom">
+                            <span class="iconify" data-icon="heroicons:x-mark"></span> Batal
+                        </a>
+                        <button type="submit" class="btn-primary-custom">
+                            <span class="iconify" data-icon="heroicons:check"></span> Simpan Data
+                        </button>
                     </div>
                 </form>
             </div>

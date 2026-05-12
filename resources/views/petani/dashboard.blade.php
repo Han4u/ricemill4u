@@ -6,7 +6,7 @@
 
 @section('topbar-actions')
     <a href="{{ route('petani.lahan.create') }}" class="btn-primary-custom">
-        <i data-lucide="plus" style="width:16px;height:16px;"></i>
+        <span class="iconify" data-icon="heroicons:plus" style="width:16px;height:16px;"></span>
         Tambah Lahan
     </a>
 @endsection
@@ -18,7 +18,7 @@
     <div class="col-sm-6 col-lg-3">
         <div class="stat-card">
             <div class="stat-icon" style="background:#e8f5ee;">
-                <i data-lucide="map" style="color:#1a5c38;width:22px;height:22px;"></i>
+                <span class="iconify" data-icon="heroicons:map" style="color:#1a5c38;width:22px;height:22px;"></span>
             </div>
             <div class="stat-value">{{ $stats['total_lahan'] }}</div>
             <div class="stat-label">Total Lahan</div>
@@ -27,7 +27,7 @@
     <div class="col-sm-6 col-lg-3">
         <div class="stat-card">
             <div class="stat-icon" style="background:#fff8e0;">
-                <i data-lucide="wheat" style="color:#a0720f;width:22px;height:22px;"></i>
+                <span class="iconify" data-icon="heroicons:hand-raised" style="color:#a0720f;width:22px;height:22px;"></span>
             </div>
             <div class="stat-value">{{ $stats['total_panen'] }}</div>
             <div class="stat-label">Total Panen</div>
@@ -35,8 +35,8 @@
     </div>
     <div class="col-sm-6 col-lg-3">
         <div class="stat-card">
-            <div class="stat-icon" style="background:#e0f0ff;">
-                <i data-lucide="package" style="color:#1a5b8f;width:22px;height:22px;"></i>
+            <div class="stat-icon" style="background:#e8f5e9;">
+                <span class="iconify" data-icon="heroicons:archive-box" style="color:#2e7d32;width:22px;height:22px;"></span>
             </div>
             <div class="stat-value">{{ $stats['total_setoran'] }}</div>
             <div class="stat-label">Total Setoran</div>
@@ -44,8 +44,8 @@
     </div>
     <div class="col-sm-6 col-lg-3">
         <div class="stat-card">
-            <div class="stat-icon" style="background:#fde8ff;">
-                <i data-lucide="trending-up" style="color:#7b1fa2;width:22px;height:22px;"></i>
+            <div class="stat-icon" style="background:#e8f5ee;">
+                <span class="iconify" data-icon="heroicons:arrow-trending-up" style="color:#1a5c38;width:22px;height:22px;"></span>
             </div>
             <div class="stat-value" style="font-size:1.25rem;">
                 Rp {{ number_format($stats['pendapatan_bulan'], 0, ',', '.') }}

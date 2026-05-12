@@ -4,35 +4,38 @@
 @section('page-title', 'Laporan Keuangan')
 @section('breadcrumb', 'Dashboard / Keuangan')
 
+@section('topbar-actions')
+<a href="{{ route('ricemill.keuangan.create') }}" class="btn-primary-custom">
+    <span class="iconify" data-icon="heroicons:plus-circle"></span> Catat Transaksi
+</a>
+@endsection
+
 @section('content')
 <div class="row mb-4">
     <div class="col-md-4">
         <div class="stat-card">
             <div class="stat-icon" style="background: rgba(22, 163, 74, 0.1); color: #16a34a;">
-                <i data-lucide="arrow-down-circle"></i>
+                <span class="iconify" data-icon="heroicons:arrow-down-circle"></span>
             </div>
-            <div class="stat-value">Rp {{ number_format($keuangan->where('tipe', 'pemasukan')->sum('jumlah'), 0, ',', '.') }}</div>
+            <div class="stat-value">Rp {{ number_format($totalPemasukan, 0, ',', '.') }}</div>
             <div class="stat-label">Total Pemasukan</div>
         </div>
     </div>
     <div class="col-md-4">
         <div class="stat-card">
             <div class="stat-icon" style="background: rgba(220, 38, 38, 0.1); color: #dc2626;">
-                <i data-lucide="arrow-up-circle"></i>
+                <span class="iconify" data-icon="heroicons:arrow-up-circle"></span>
             </div>
-            <div class="stat-value">Rp {{ number_format($keuangan->where('tipe', 'pengeluaran')->sum('jumlah'), 0, ',', '.') }}</div>
+            <div class="stat-value">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</div>
             <div class="stat-label">Total Pengeluaran</div>
         </div>
     </div>
     <div class="col-md-4">
         <div class="stat-card">
-            <div class="stat-icon" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;">
-                <i data-lucide="wallet"></i>
+            <div class="stat-icon" style="background: rgba(13, 148, 136, 0.1); color: #0d9488;">
+                <span class="iconify" data-icon="heroicons:wallet"></span>
             </div>
-            @php
-                $saldo = $keuangan->where('tipe', 'pemasukan')->sum('jumlah') - $keuangan->where('tipe', 'pengeluaran')->sum('jumlah');
-            @endphp
-            <div class="stat-value">Rp {{ number_format($saldo, 0, ',', '.') }}</div>
+            <div class="stat-value">Rp {{ number_format($totalPemasukan - $totalPengeluaran, 0, ',', '.') }}</div>
             <div class="stat-label">Saldo Kas</div>
         </div>
     </div>
@@ -41,7 +44,6 @@
 <div class="card">
     <div class="card-header-clean">
         <h5>Mutasi Kas Rice Mill</h5>
-        <button class="btn-primary-custom btn-sm"><i data-lucide="plus"></i> Catat Transaksi</button>
     </div>
     <div class="table-responsive">
         <table class="table table-clean mb-0">
@@ -72,7 +74,7 @@
                 @empty
                 <tr>
                     <td colspan="6" class="text-center py-5 text-muted">
-                        <i data-lucide="bar-chart-2" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></i>
+                        <span class="iconify" data-icon="heroicons:presentation-chart-bar" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></span>
                         <p>Belum ada data transaksi keuangan.</p>
                     </td>
                 </tr>

@@ -5,9 +5,9 @@
 @section('breadcrumb', 'Dashboard / Pengiriman')
 
 @section('topbar-actions')
-<button class="btn-primary-custom">
-    <i data-lucide="truck"></i> Buat Pengiriman
-</button>
+<a href="{{ route('ricemill.pengiriman.create') }}" class="btn-primary-custom">
+    <span class="iconify" data-icon="heroicons:truck"></span> Buat Pengiriman
+</a>
 @endsection
 
 @section('content')
@@ -32,27 +32,33 @@
                 @forelse($pengiriman as $item)
                 <tr>
                     <td>{{ \Carbon\Carbon::parse($item->tanggal_kirim)->format('d M Y') }}</td>
-                    <td class="fw-medium">{{ $item->no_surat_jalan ?? 'SJ-'.time().'-'.$item->id }}</td>
-                    <td>{{ $item->tujuan ?? 'Packager Utama' }}</td>
-                    <td>{{ number_format($item->jumlah_beras, 0, ',', '.') }} Kg</td>
-                    <td>{{ $item->kendaraan ?? 'Truck AB 1234' }}</td>
+                    <td class="fw-medium">#SJ-{{ str_pad($item->id, 5, '0', STR_PAD_LEFT) }}</td>
+                    <td>{{ $item->nama_packager }}</td>
+                    <td>{{ number_format($item->jumlah_karung * $item->berat_per_karung, 0, ',', '.') }} Kg</td>
+                    <td>{{ $item->jenis_beras }}</td>
                     <td>
                         @if($item->status == 'diterima')
                             <span class="badge-custom badge-success-custom">Diterima</span>
                         @elseif($item->status == 'dikirim')
                             <span class="badge-custom badge-info-custom">Dikirim</span>
+                        @elseif($item->status == 'ditolak')
+                            <span class="badge-custom badge-danger-custom">Ditolak</span>
                         @else
                             <span class="badge-custom badge-warning-custom">Menunggu</span>
                         @endif
                     </td>
                     <td>
-                        <button class="btn-outline-custom btn-sm" title="Tracking"><i data-lucide="map-pin" style="width:14px;height:14px;"></i></button>
+                        <div class="d-flex gap-2">
+                            <a href="{{ route('ricemill.pengiriman.edit', $item) }}" class="btn-outline-custom btn-sm">
+                                <span class="iconify" data-icon="heroicons:pencil" style="width:14px;height:14px;"></span>
+                            </a>
+                        </div>
                     </td>
                 </tr>
                 @empty
                 <tr>
                     <td colspan="7" class="text-center py-5 text-muted">
-                        <i data-lucide="truck" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></i>
+                        <span class="iconify" data-icon="heroicons:truck" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></span>
                         <p>Belum ada data pengiriman.</p>
                     </td>
                 </tr>

@@ -7,6 +7,8 @@ use App\Models\PenerimaanBeras;
 use App\Models\HasilPengemasan;
 use App\Models\Pesanan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -17,77 +19,58 @@ class DashboardController extends Controller
         $tahun  = now()->year;
 
         // ── Stat Cards ──────────────────────────────────────────────
-        $totalPenerimaan = PenerimaanBeras::where('user_id', $userId)
+        $totalTerimaKg = PenerimaanBeras::where('user_id', $userId)
             ->whereMonth('tanggal', $bulan)->whereYear('tanggal', $tahun)
-            ->count();
+            ->sum('jumlah_beras');
 
-        $totalKemasan = HasilPengemasan::where('user_id', $userId)
+        $totalKemasPack = HasilPengemasan::where('user_id', $userId)
             ->whereMonth('tanggal', $bulan)->whereYear('tanggal', $tahun)
             ->sum('jumlah_kemasan');
 
-        // Efisiensi: (layak jual / total) * 100
-        $totalProduksi  = HasilPengemasan::where('user_id', $userId)->count();
-        $layakJual      = HasilPengemasan::where('user_id', $userId)->where('kualitas', 'layak jual')->count();
-        $reject         = HasilPengemasan::where('user_id', $userId)->where('kualitas', 'reject')->count();
-        $efisiensi      = $totalProduksi > 0 ? round(($layakJual / $totalProduksi) * 100, 1) : 0;
+        $pesananBaru = Pesanan::where('user_id', $userId)
+            ->where('status', 'menunggu')->count();
 
-        $totalPesanan   = Pesanan::where('user_id', $userId)
-            ->whereMonth('tanggal', $bulan)->whereYear('tanggal', $tahun)
-            ->count();
-
-        $pesananPending = Pesanan::where('user_id', $userId)
-            ->where('status', 'pending')
-            ->count();
-
-        // Omzet bulan ini dari pesanan selesai
-        $omzetBulan = Pesanan::where('user_id', $userId)
+        $totalPenjualan = Pesanan::where('user_id', $userId)
             ->where('status', 'selesai')
             ->whereMonth('tanggal', $bulan)->whereYear('tanggal', $tahun)
             ->sum('total_harga');
 
-        // ── Distribusi Kemasan ──────────────────────────────────────
-        $kemasan5kg  = HasilPengemasan::where('user_id', $userId)->where('jenis_kemasan', '5kg')
-            ->whereMonth('tanggal', $bulan)->sum('jumlah_kemasan');
-        $kemasan10kg = HasilPengemasan::where('user_id', $userId)->where('jenis_kemasan', '10kg')
-            ->whereMonth('tanggal', $bulan)->sum('jumlah_kemasan');
-        $kemasan25kg = HasilPengemasan::where('user_id', $userId)->where('jenis_kemasan', '25kg')
-            ->whereMonth('tanggal', $bulan)->sum('jumlah_kemasan');
+        // ── Grafik Produksi (Last 7 Days) ───────────────────────────
+        $produksiHarian = HasilPengemasan::where('user_id', $userId)
+            ->select(DB::raw('DATE(tanggal) as date'), DB::raw('SUM(jumlah_kemasan) as total'))
+            ->groupBy('date')
+            ->orderBy('date', 'desc')
+            ->take(7)
+            ->get()
+            ->reverse();
+
+        // ── Distribusi Kemasan (Pie Chart Data) ─────────────────────
+        $distribusiKemasan = HasilPengemasan::where('user_id', $userId)
+            ->select('jenis_kemasan', DB::raw('count(*) as total'))
+            ->groupBy('jenis_kemasan')
+            ->get();
 
         $stats = [
-            'total_penerimaan' => $totalPenerimaan,
-            'total_kemasan'    => $totalKemasan,
-            'efisiensi'        => $efisiensi,
-            'total_pesanan'    => $totalPesanan,
-            'pesanan_pending'  => $pesananPending,
-            'omzet_bulan'      => $omzetBulan,
-            'kemasan_5kg'      => $kemasan5kg,
-            'kemasan_10kg'     => $kemasan10kg,
-            'kemasan_25kg'     => $kemasan25kg,
-            'layak_jual'       => $layakJual,
-            'reject'           => $reject,
+            'total_terima_kg'  => $totalTerimaKg,
+            'total_kemas_pack' => $totalKemasPack,
+            'pesanan_baru'     => $pesananBaru,
+            'total_penjualan'  => $totalPenjualan,
+            'chart_labels'     => $produksiHarian->pluck('date')->map(fn($d) => Carbon::parse($d)->format('d M'))->toArray(),
+            'chart_values'     => $produksiHarian->pluck('total')->toArray(),
+            'pie_labels'       => $distribusiKemasan->pluck('jenis_kemasan')->toArray(),
+            'pie_values'       => $distribusiKemasan->pluck('total')->toArray(),
         ];
 
         // ── Recent Data ─────────────────────────────────────────────
         $recentPenerimaan = PenerimaanBeras::where('user_id', $userId)
-            ->latest('tanggal')
-            ->take(5)
-            ->get();
+            ->latest('tanggal')->take(5)->get();
 
         $recentPengemasan = HasilPengemasan::where('user_id', $userId)
-            ->latest('tanggal')
-            ->take(5)
-            ->get();
+            ->latest('tanggal')->take(5)->get();
 
         $recentPesanan = Pesanan::where('user_id', $userId)
-            ->latest('tanggal')
-            ->take(5)
-            ->get();
+            ->latest('tanggal')->take(5)->get();
 
-        return view('packager.dashboard', compact(
-            'stats',
-            'recentPenerimaan',
-            'recentPengemasan',
-            'recentPesanan'
-        ));
+        return view('packager.dashboard', compact('stats', 'recentPenerimaan', 'recentPengemasan', 'recentPesanan'));
     }
 }

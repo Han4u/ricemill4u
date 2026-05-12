@@ -15,57 +15,47 @@ class KeuanganController extends Controller
     public function index()
     {
         $keuangan = KeuanganRicemill::where('user_id', Auth::id())
-            ->latest()
+            ->latest('tanggal')
             ->paginate(10);
 
-        return view('ricemill.keuangan.index', compact('keuangan'));
+        $totalPemasukan = KeuanganRicemill::where('user_id', Auth::id())
+            ->where('tipe', 'pemasukan')->sum('jumlah');
+
+        $totalPengeluaran = KeuanganRicemill::where('user_id', Auth::id())
+            ->where('tipe', 'pengeluaran')->sum('jumlah');
+
+        return view('ricemill.keuangan.index', compact('keuangan', 'totalPemasukan', 'totalPengeluaran'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('ricemill.keuangan.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'tipe'       => 'required|in:pemasukan,pengeluaran',
+            'kategori'   => 'required|string|max:100',
+            'jumlah'     => 'required|numeric|min:0.01',
+            'tanggal'    => 'required|date',
+            'keterangan' => 'required|string|max:255',
+            'catatan'    => 'nullable|string',
+        ]);
+
+        $validated['user_id'] = Auth::id();
+
+        KeuanganRicemill::create($validated);
+
+        return redirect()->route('ricemill.keuangan.index')
+            ->with('success', 'Transaksi keuangan berhasil dicatat!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(KeuanganRicemill $keuanganRicemill)
+    public function destroy(KeuanganRicemill $keuangan)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(KeuanganRicemill $keuanganRicemill)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, KeuanganRicemill $keuanganRicemill)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(KeuanganRicemill $keuanganRicemill)
-    {
-        //
+        abort_if($keuangan->user_id !== Auth::id(), 403);
+        $keuangan->delete();
+        return redirect()->route('ricemill.keuangan.index')
+            ->with('success', 'Data keuangan berhasil dihapus!');
     }
 }

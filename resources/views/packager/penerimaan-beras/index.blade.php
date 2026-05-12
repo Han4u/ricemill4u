@@ -6,7 +6,7 @@
 
 @section('topbar-actions')
 <a href="{{ route('packager.penerimaan-beras.create') }}" class="btn-primary-custom">
-    <i data-lucide="plus-circle"></i> Terima Beras
+    <span class="iconify" data-icon="heroicons:plus-circle"></span> Terima Beras
 </a>
 @endsection
 
@@ -31,22 +31,28 @@
             <tbody>
                 @forelse($penerimaan as $item)
                 <tr>
-                    <td>{{ \Carbon\Carbon::parse($item->tanggal_terima)->format('d M Y') }}</td>
-                    <td class="fw-medium">{{ $item->no_surat_jalan }}</td>
-                    <td>{{ $item->asal_ricemill ?? 'Rice Mill Utama' }}</td>
+                    <td>{{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}</td>
+                    <td class="fw-medium">#SJ-{{ $item->pengiriman_beras_id ?? 'Manual' }}</td>
+                    <td>{{ $item->asal_penggilingan }}</td>
                     <td>{{ number_format($item->jumlah_beras, 0, ',', '.') }} Kg</td>
-                    <td><span class="badge-custom badge-info-custom">{{ $item->kualitas ?? 'Premium' }}</span></td>
+                    <td>{{ $item->jenis_beras }}</td>
                     <td>
-                        <span class="badge-custom badge-success-custom">Diverifikasi</span>
+                        <span class="badge-custom {{ $item->status == 'diterima' ? 'badge-success-custom' : ($item->status == 'ditolak' ? 'badge-danger-custom' : 'badge-warning-custom') }}">
+                            {{ ucfirst($item->status) }}
+                        </span>
                     </td>
                     <td>
-                        <button class="btn-outline-custom btn-sm"><i data-lucide="eye" style="width:14px;height:14px;"></i></button>
+                        <div class="d-flex gap-2">
+                            <a href="{{ route('packager.penerimaan-beras.edit', $item) }}" class="btn-outline-custom btn-sm">
+                                <span class="iconify" data-icon="heroicons:pencil" style="width:14px;height:14px;"></span>
+                            </a>
+                        </div>
                     </td>
                 </tr>
                 @empty
                 <tr>
                     <td colspan="7" class="text-center py-5 text-muted">
-                        <i data-lucide="inbox" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></i>
+                        <span class="iconify" data-icon="heroicons:inbox-stack" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></span>
                         <p>Belum ada data penerimaan beras.</p>
                     </td>
                 </tr>

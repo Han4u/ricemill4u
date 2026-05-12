@@ -4,12 +4,18 @@
 @section('page-title', 'Riwayat Produksi')
 @section('breadcrumb', 'Dashboard / Produksi')
 
+@section('topbar-actions')
+<a href="{{ route('ricemill.produksi.create') }}" class="btn-primary-custom">
+    <span class="iconify" data-icon="heroicons:plus-circle"></span> Catat Hasil Produksi
+</a>
+@endsection
+
 @section('content')
 <div class="row mb-4">
     <div class="col-md-4">
         <div class="stat-card">
             <div class="stat-icon" style="background: rgba(22, 163, 74, 0.1); color: #16a34a;">
-                <i data-lucide="package"></i>
+                <span class="iconify" data-icon="heroicons:archive-box"></span>
             </div>
             <div class="stat-value">{{ number_format($produksi->sum('jumlah_beras'), 0, ',', '.') }} Kg</div>
             <div class="stat-label">Total Produksi Beras</div>
@@ -18,7 +24,7 @@
     <div class="col-md-4">
         <div class="stat-card">
             <div class="stat-icon" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;">
-                <i data-lucide="percent"></i>
+                <span class="iconify" data-icon="heroicons:receipt-percent"></span>
             </div>
             @php
                 $totalGabah = $produksi->sum('jumlah_gabah');
@@ -52,24 +58,31 @@
                 @forelse($produksi as $item)
                 <tr>
                     <td>{{ \Carbon\Carbon::parse($item->tanggal_proses)->format('d M Y') }}</td>
-                    <td>#{{ $item->id }}</td>
+                    <td class="fw-medium">{{ $item->batch_id }}</td>
                     <td>{{ number_format($item->jumlah_gabah, 0, ',', '.') }} Kg</td>
                     <td class="fw-bold text-success">{{ number_format($item->jumlah_beras, 0, ',', '.') }} Kg</td>
                     <td>
-                        @php
-                            $r = $item->jumlah_gabah > 0 ? round(($item->jumlah_beras / $item->jumlah_gabah) * 100, 1) : 0;
-                        @endphp
-                        {{ $r }}%
+                        <span class="{{ $item->notifikasi_rendemen_rendah ? 'text-danger fw-bold' : '' }}">
+                            {{ $item->rendemen }}%
+                        </span>
+                        @if($item->notifikasi_rendemen_rendah)
+                            <span class="iconify text-danger" data-icon="heroicons:exclamation-triangle" title="Rendemen Rendah"></span>
+                        @endif
                     </td>
-                    <td><span class="badge-custom badge-info-custom">{{ $item->kualitas ?? 'Premium' }}</span></td>
+                    <td><span class="badge-custom badge-info-custom">Standard</span></td>
                     <td>
-                        <button class="btn-outline-custom btn-sm"><i data-lucide="printer" style="width:14px;height:14px;"></i></button>
+                        <form action="{{ route('ricemill.produksi.destroy', $item) }}" method="POST" onsubmit="return confirm('Hapus data ini?')">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="btn-outline-custom btn-sm text-danger" style="border-color:#f5b8b8;">
+                                <span class="iconify" data-icon="heroicons:trash" style="width:14px;height:14px;"></span>
+                            </button>
+                        </form>
                     </td>
                 </tr>
                 @empty
                 <tr>
                     <td colspan="7" class="text-center py-5 text-muted">
-                        <i data-lucide="trending-up" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></i>
+                        <span class="iconify" data-icon="heroicons:arrow-trending-up" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></span>
                         <p>Belum ada data riwayat produksi.</p>
                     </td>
                 </tr>

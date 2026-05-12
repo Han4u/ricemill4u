@@ -13,23 +13,23 @@
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <!-- Iconify (Heroicons) -->
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
     <style>
         :root {
-            --primary:      #1a3a5c;
-            --primary-light:#2a5485;
-            --accent:       #e8a84b;
-            --accent2:      #3b82f6;
-            --bg-main:      #f0f4f8;
+            --primary:      #1a5c38;
+            --primary-light:#2d7a50;
+            --accent:       #e8b84b;
+            --accent2:      #e8b84b;
+            --bg-main:      #f4f6f3;
             --bg-card:      #ffffff;
-            --text-main:    #1c2733;
-            --text-muted:   #6b7c8e;
-            --border:       #dde3ea;
+            --text-main:    #1c2b1e;
+            --text-muted:   #6b7c6e;
+            --border:       #dde5de;
             --sidebar-w:    265px;
         }
 
@@ -49,7 +49,7 @@
             top: 0; left: 0;
             width: var(--sidebar-w);
             height: 100vh;
-            background: linear-gradient(175deg, #1a3a5c 0%, #0f2540 100%);
+            background: var(--primary);
             padding: 0;
             display: flex;
             flex-direction: column;
@@ -79,9 +79,9 @@
         .sidebar-logo .role-badge {
             display: inline-block;
             margin-top: 6px;
-            background: rgba(59,130,246,.25);
-            border: 1px solid rgba(59,130,246,.4);
-            color: #93c5fd;
+            background: rgba(255,255,255,.15);
+            border: 1px solid rgba(255,255,255,.2);
+            color: #fff;
             font-size: .68rem;
             font-weight: 500;
             padding: 2px 8px;
@@ -151,13 +151,12 @@
         }
 
         .nav-link.active {
-            background: rgba(59,130,246,.2);
+            background: rgba(255,255,255,.15);
             color: #fff;
             font-weight: 500;
-            border-left: 3px solid #3b82f6;
         }
 
-        .nav-link i { width: 18px; height: 18px; flex-shrink: 0; }
+        .nav-link .iconify { width: 20px; height: 20px; flex-shrink: 0; }
 
         .sidebar-footer {
             padding: 16px 12px;
@@ -247,7 +246,7 @@
             top: 0; right: 0;
             width: 80px; height: 80px;
             border-radius: 50%;
-            background: rgba(59,130,246,.04);
+            background: rgba(22,163,74,.04);
             transform: translate(20px, -20px);
         }
 
@@ -366,7 +365,7 @@
 
         .badge-success-custom  { background:#e8f5ee; color:#1a5c38; }
         .badge-warning-custom  { background:#fef6e0; color:#a0720f; }
-        .badge-info-custom     { background:#e0f0ff; color:#1a5b8f; }
+        .badge-info-custom     { background:#e8f5e9; color:#2e7d32; }
         .badge-danger-custom   { background:#fde8e8; color:#8b1a1a; }
         .badge-purple-custom   { background:#f0e8ff; color:#5b21b6; }
 
@@ -440,7 +439,7 @@
             flex-shrink: 0;
         }
         .dot-menunggu { background: #f59e0b; }
-        .dot-diproses { background: #3b82f6; }
+        .dot-diproses { background: #16a34a; }
         .dot-selesai  { background: #16a34a; }
 
         @media (max-width: 768px) {
@@ -475,35 +474,35 @@
         <div class="nav-section-label">Utama</div>
         <a href="{{ route('ricemill.dashboard') }}"
            class="nav-link {{ request()->routeIs('ricemill.dashboard') ? 'active' : '' }}">
-            <i data-lucide="layout-dashboard"></i> Dashboard
+            <span class="iconify" data-icon="heroicons:squares-2x2"></span> Dashboard
         </a>
 
         <div class="nav-section-label">Penerimaan Gabah</div>
         <a href="{{ route('ricemill.penerimaan-gabah.index') }}"
            class="nav-link {{ request()->routeIs('ricemill.penerimaan-gabah.*') ? 'active' : '' }}">
-            <i data-lucide="inbox"></i> Penerimaan Gabah
+            <span class="iconify" data-icon="heroicons:inbox-stack"></span> Penerimaan Gabah
         </a>
 
         <div class="nav-section-label">Operasional</div>
         <a href="{{ route('ricemill.operasional.index') }}"
            class="nav-link {{ request()->routeIs('ricemill.operasional.*') ? 'active' : '' }}">
-            <i data-lucide="settings-2"></i> Operasional Penggilingan
+            <span class="iconify" data-icon="heroicons:cog-6-tooth"></span> Operasional Penggilingan
         </a>
         <a href="{{ route('ricemill.produksi.index') }}"
            class="nav-link {{ request()->routeIs('ricemill.produksi.*') ? 'active' : '' }}">
-            <i data-lucide="trending-up"></i> Riwayat Produksi
+            <span class="iconify" data-icon="heroicons:arrow-trending-up"></span> Riwayat Produksi
         </a>
 
         <div class="nav-section-label">Distribusi</div>
         <a href="{{ route('ricemill.pengiriman.index') }}"
            class="nav-link {{ request()->routeIs('ricemill.pengiriman.*') ? 'active' : '' }}">
-            <i data-lucide="truck"></i> Pengiriman Beras
+            <span class="iconify" data-icon="heroicons:truck"></span> Pengiriman Beras
         </a>
 
         <div class="nav-section-label">Keuangan</div>
         <a href="{{ route('ricemill.keuangan.index') }}"
            class="nav-link {{ request()->routeIs('ricemill.keuangan.*') ? 'active' : '' }}">
-            <i data-lucide="bar-chart-2"></i> Laporan Keuangan
+            <span class="iconify" data-icon="heroicons:presentation-chart-bar"></span> Laporan Keuangan
         </a>
     </nav>
 
@@ -511,7 +510,7 @@
         <form action="{{ route('logout') }}" method="POST">
             @csrf
             <button type="submit" class="nav-link w-100" style="background:none;border:none;cursor:pointer;text-align:left;">
-                <i data-lucide="log-out"></i> Keluar
+                <span class="iconify" data-icon="heroicons:arrow-left-on-rectangle"></span> Keluar
             </button>
         </form>
     </div>
@@ -532,14 +531,14 @@
     <div class="content-area">
         @if(session('success'))
         <div class="alert-clean alert-success-clean mb-4">
-            <i data-lucide="check-circle" style="width:18px;height:18px;"></i>
+            <span class="iconify" data-icon="heroicons:check-circle" style="width:20px;height:20px;"></span>
             {{ session('success') }}
         </div>
         @endif
 
         @if(session('error'))
         <div class="alert-clean alert-danger-clean mb-4">
-            <i data-lucide="x-circle" style="width:18px;height:18px;"></i>
+            <span class="iconify" data-icon="heroicons:x-circle" style="width:20px;height:20px;"></span>
             {{ session('error') }}
         </div>
         @endif
@@ -549,7 +548,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>lucide.createIcons();</script>
+<script></script>
 @stack('scripts')
 </body>
 </html>

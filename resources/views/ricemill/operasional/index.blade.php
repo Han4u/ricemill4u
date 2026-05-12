@@ -5,9 +5,9 @@
 @section('breadcrumb', 'Dashboard / Operasional')
 
 @section('topbar-actions')
-<button class="btn-primary-custom">
-    <i data-lucide="play-circle"></i> Mulai Proses Baru
-</button>
+<a href="{{ route('ricemill.operasional.create') }}" class="btn-primary-custom">
+    <span class="iconify" data-icon="heroicons:play-circle"></span> Mulai Proses Baru
+</a>
 @endsection
 
 @section('content')
@@ -32,10 +32,9 @@
                 @forelse($operasional as $item)
                 <tr>
                     <td>{{ \Carbon\Carbon::parse($item->tanggal_proses)->format('d M Y') }}</td>
-                    <td class="fw-medium">#BTH-{{ $item->id }}</td>
-                    <td>{{ $item->mesin ?? 'Mesin Utama' }}</td>
-                    <td>{{ number_format($item->jumlah_gabah, 0, ',', '.') }} Kg</td>
-                    <td>{{ $item->operator ?? 'Staff' }}</td>
+                    <td class="fw-medium">{{ $item->batch_id }}</td>
+                    <td>{{ $item->penerimaanGabah->nama_petani ?? '-' }}</td>
+                    <td>{{ number_format($item->jumlah_gabah_masuk, 0, ',', '.') }} Kg</td>
                     <td>
                         @if($item->status == 'selesai')
                             <span class="badge-custom badge-success-custom">Selesai</span>
@@ -47,14 +46,16 @@
                     </td>
                     <td>
                         <div class="d-flex gap-2">
-                            <button class="btn-outline-custom btn-sm"><i data-lucide="settings" style="width:14px;height:14px;"></i></button>
+                            <a href="{{ route('ricemill.operasional.edit', $item) }}" class="btn-outline-custom btn-sm">
+                                <span class="iconify" data-icon="heroicons:pencil" style="width:14px;height:14px;"></span>
+                            </a>
                         </div>
                     </td>
                 </tr>
                 @empty
                 <tr>
                     <td colspan="7" class="text-center py-5 text-muted">
-                        <i data-lucide="settings-2" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></i>
+                        <span class="iconify" data-icon="heroicons:cog-6-tooth" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></span>
                         <p>Belum ada data operasional.</p>
                     </td>
                 </tr>
