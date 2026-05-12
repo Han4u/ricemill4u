@@ -14,58 +14,47 @@ class PengemasanController extends Controller
      */
     public function index()
     {
-        $pengemasan = HasilPengemasan::where('user_id', Auth::id())
-            ->latest()
+        $pengemasan = HasilPengemasan::with('penerimaanBeras')
+            ->where('user_id', Auth::id())
+            ->latest('tanggal')
             ->paginate(10);
 
         return view('packager.pengemasan.index', compact('pengemasan'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $penerimaan = PenerimaanBeras::where('user_id', Auth::id())
+            ->where('status', 'diterima')
+            ->get();
+        return view('packager.pengemasan.create', compact('penerimaan'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'penerimaan_beras_id' => 'required|exists:penerimaan_beras,id',
+            'tanggal'             => 'required|date',
+            'jenis_beras'         => 'required|string|max:100',
+            'jenis_kemasan'       => 'required|in:5kg,10kg,25kg,50kg',
+            'jumlah_kemasan'      => 'required|integer|min:1',
+            'kualitas'            => 'required|in:layak_jual,reject',
+            'catatan'             => 'nullable|string',
+        ]);
+
+        $validated['user_id'] = Auth::id();
+
+        HasilPengemasan::create($validated);
+
+        return redirect()->route('packager.pengemasan.index')
+            ->with('success', 'Hasil pengemasan berhasil dicatat!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(HasilPengemasan $hasilPengemasan)
+    public function destroy(HasilPengemasan $pengemasan)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(HasilPengemasan $hasilPengemasan)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, HasilPengemasan $hasilPengemasan)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(HasilPengemasan $hasilPengemasan)
-    {
-        //
+        abort_if($pengemasan->user_id !== Auth::id(), 403);
+        $pengemasan->delete();
+        return redirect()->route('packager.pengemasan.index')
+            ->with('success', 'Data pengemasan berhasil dihapus!');
     }
 }

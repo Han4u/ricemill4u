@@ -21,15 +21,15 @@
 
     <style>
         :root {
-            --primary:      #4f2d87;
-            --primary-light:#6d3fb5;
-            --accent:       #f59e0b;
-            --accent2:      #8b5cf6;
-            --bg-main:      #f4f2f9;
+            --primary:      #1a5c38;
+            --primary-light:#2d7a50;
+            --accent:       #e8b84b;
+            --accent2:      #e8b84b;
+            --bg-main:      #f4f6f3;
             --bg-card:      #ffffff;
-            --text-main:    #1e1a2e;
-            --text-muted:   #6b6880;
-            --border:       #e2ddf0;
+            --text-main:    #1c2b1e;
+            --text-muted:   #6b7c6e;
+            --border:       #dde5de;
             --sidebar-w:    265px;
         }
 
@@ -49,7 +49,7 @@
             top: 0; left: 0;
             width: var(--sidebar-w);
             height: 100vh;
-            background: linear-gradient(175deg, #4f2d87 0%, #2d1860 100%);
+            background: var(--primary);
             padding: 0;
             display: flex;
             flex-direction: column;
@@ -79,9 +79,9 @@
         .sidebar-logo .role-badge {
             display: inline-block;
             margin-top: 6px;
-            background: rgba(139,92,246,.25);
-            border: 1px solid rgba(139,92,246,.4);
-            color: #c4b5fd;
+            background: rgba(255,255,255,.15);
+            border: 1px solid rgba(255,255,255,.2);
+            color: #fff;
             font-size: .68rem;
             font-weight: 500;
             padding: 2px 8px;
@@ -151,10 +151,9 @@
         }
 
         .nav-link.active {
-            background: rgba(139,92,246,.25);
+            background: rgba(255,255,255,.15);
             color: #fff;
             font-weight: 500;
-            border-left: 3px solid #8b5cf6;
         }
 
         .nav-link .iconify { width: 20px; height: 20px; flex-shrink: 0; }
@@ -247,7 +246,7 @@
             top: 0; right: 0;
             width: 80px; height: 80px;
             border-radius: 50%;
-            background: rgba(139,92,246,.04);
+            background: rgba(22,163,74,.04);
             transform: translate(20px, -20px);
         }
 
@@ -304,7 +303,7 @@
             background: var(--primary-light);
             color: #fff;
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(79,45,135,.3);
+            box-shadow: 0 4px 12px rgba(26,92,56,.25);
         }
 
         .btn-outline-custom {
@@ -325,7 +324,7 @@
         .btn-outline-custom:hover {
             border-color: var(--primary);
             color: var(--primary);
-            background: rgba(79,45,135,.04);
+            background: rgba(26,92,56,.04);
         }
 
         /* ===== TABLE ===== */
@@ -337,19 +336,19 @@
             color: var(--text-muted);
             border-bottom: 1px solid var(--border);
             padding: 12px 16px;
-            background: #f8f6fd;
+            background: #f0fdf4;
         }
 
         .table-clean tbody td {
             padding: 14px 16px;
             font-size: .88rem;
-            border-bottom: 1px solid #f2effa;
+            border-bottom: 1px solid #f0f2f0;
             vertical-align: middle;
             color: var(--text-main);
         }
 
         .table-clean tbody tr:hover td {
-            background: #f8f6fd;
+            background: #f0fdf4;
         }
 
         .table-clean tbody tr:last-child td {
@@ -366,9 +365,9 @@
 
         .badge-success-custom  { background:#e8f5ee; color:#1a5c38; }
         .badge-warning-custom  { background:#fef6e0; color:#a0720f; }
-        .badge-info-custom     { background:#e0f0ff; color:#1a5b8f; }
+        .badge-info-custom     { background:#e8f5e9; color:#2e7d32; }
         .badge-danger-custom   { background:#fde8e8; color:#8b1a1a; }
-        .badge-purple-custom   { background:#f0e8ff; color:#5b21b6; }
+        .badge-purple-custom   { background:#e8f5e9; color:#2e7d32; }
 
         /* ===== FORM ===== */
         .form-label-custom {
@@ -391,7 +390,7 @@
 
         .form-control-custom:focus, .form-select-custom:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79,45,135,.1);
+            box-shadow: 0 0 0 3px rgba(26,92,56,.1);
             outline: none;
         }
 
@@ -419,7 +418,7 @@
 
         .upload-zone:hover {
             border-color: var(--primary);
-            background: rgba(79,45,135,.02);
+            background: rgba(26,92,56,.02);
         }
 
         @media (max-width: 768px) {

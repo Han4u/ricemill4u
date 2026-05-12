@@ -13,7 +13,7 @@
 @section('content')
 
 <!-- TOTAL PENDAPATAN -->
-<div class="card mb-4" style="background:linear-gradient(135deg,#1a3a5c,#1a5b8f);border:none;">
+<div class="card mb-4" style="background:linear-gradient(135deg,#1a5c38,#2d7a50);border:none;">
     <div style="padding:20px 24px;display:flex;align-items:center;justify-content:space-between;">
         <div>
             <div style="color:rgba(255,255,255,.65);font-size:.8rem;margin-bottom:4px;">Total Pendapatan dari Setoran</div>

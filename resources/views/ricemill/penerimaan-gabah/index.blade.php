@@ -38,18 +38,24 @@
                     <td>{{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}</td>
                     <td class="fw-medium">#TRX-{{ $item->id }}</td>
                     <td>{{ $item->nama_petani ?? 'Umum' }}</td>
-                    <td>{{ number_format($item->berat_gabah, 0, ',', '.') }} Kg</td>
-                    <td>{{ $item->jenis_gabah }}</td>
+                    <td>{{ number_format($item->jumlah_gabah, 0, ',', '.') }} Kg</td>
+                    <td>{{ ucfirst($item->kualitas_gabah) }}</td>
                     <td>
-                        <span class="badge-custom {{ $item->status == 'selesai' ? 'badge-success-custom' : 'badge-warning-custom' }}">
+                        <span class="badge-custom {{ $item->status == 'selesai' ? 'badge-success-custom' : ($item->status == 'diproses' ? 'badge-info-custom' : 'badge-warning-custom') }}">
                             {{ ucfirst($item->status) }}
                         </span>
                     </td>
                     <td>
                         <div class="d-flex gap-2">
-                            <a href="#" class="btn-outline-custom btn-sm" title="Detail">
-                                <span class="iconify" data-icon="heroicons:eye" style="width:14px;height:14px;"></span>
+                            <a href="{{ route('ricemill.penerimaan-gabah.edit', $item) }}" class="btn-outline-custom btn-sm" title="Edit">
+                                <span class="iconify" data-icon="heroicons:pencil" style="width:14px;height:14px;"></span>
                             </a>
+                            <form action="{{ route('ricemill.penerimaan-gabah.destroy', $item) }}" method="POST" onsubmit="return confirm('Hapus data ini?')">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="btn-outline-custom btn-sm text-danger" style="border-color:#f5b8b8;">
+                                    <span class="iconify" data-icon="heroicons:trash" style="width:14px;height:14px;"></span>
+                                </button>
+                            </form>
                         </div>
                     </td>
                 </tr>

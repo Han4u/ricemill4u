@@ -23,6 +23,16 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $user = auth()->user();
+
+        if ($user->role === 'petani') {
+            return redirect()->route('petani.dashboard');
+        } elseif ($user->role === 'rice_mill') {
+            return redirect()->route('ricemill.dashboard');
+        } elseif ($user->role === 'packager') {
+            return redirect()->route('packager.dashboard');
+        }
+
         return view('home');
     }
 }

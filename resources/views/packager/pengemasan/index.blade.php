@@ -5,16 +5,16 @@
 @section('breadcrumb', 'Dashboard / Pengemasan')
 
 @section('topbar-actions')
-<button class="btn-primary-custom">
+<a href="{{ route('packager.pengemasan.create') }}" class="btn-primary-custom">
     <span class="iconify" data-icon="heroicons:plus-circle"></span> Catat Pengemasan
-</button>
+</a>
 @endsection
 
 @section('content')
 <div class="row mb-4">
     <div class="col-md-4">
         <div class="stat-card">
-            <div class="stat-icon" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">
+            <div class="stat-icon" style="background: rgba(22, 163, 74, 0.1); color: #16a34a;">
                 <span class="iconify" data-icon="heroicons:cube"></span>
             </div>
             <div class="stat-value">{{ number_format($pengemasan->count(), 0, ',', '.') }}</div>
@@ -43,14 +43,23 @@
             <tbody>
                 @forelse($pengemasan as $item)
                 <tr>
-                    <td>{{ \Carbon\Carbon::parse($item->tanggal_kemas)->format('d M Y') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}</td>
                     <td class="fw-medium">#PKG-{{ $item->id }}</td>
-                    <td>{{ $item->ukuran_kemasan }}</td>
-                    <td>{{ number_format($item->jumlah_pack, 0, ',', '.') }} Pcs</td>
-                    <td>{{ number_format($item->total_berat, 0, ',', '.') }} Kg</td>
-                    <td>{{ $item->merek ?? 'Beras Kita' }}</td>
+                    <td>{{ $item->jenis_kemasan }}</td>
+                    <td>{{ number_format($item->jumlah_kemasan, 0, ',', '.') }} Pack</td>
+                    <td>{{ $item->jenis_beras }}</td>
                     <td>
-                        <button class="btn-outline-custom btn-sm"><span class="iconify" data-icon="heroicons:printer" style="width:14px;height:14px;"></span></button>
+                        <span class="badge-custom {{ $item->kualitas == 'layak_jual' ? 'badge-success-custom' : 'badge-danger-custom' }}">
+                            {{ str_replace('_', ' ', ucfirst($item->kualitas)) }}
+                        </span>
+                    </td>
+                    <td>
+                        <form action="{{ route('packager.pengemasan.destroy', $item) }}" method="POST" onsubmit="return confirm('Hapus data ini?')">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="btn-outline-custom btn-sm text-danger" style="border-color:#f5b8b8;">
+                                <span class="iconify" data-icon="heroicons:trash" style="width:14px;height:14px;"></span>
+                            </button>
+                        </form>
                     </td>
                 </tr>
                 @empty

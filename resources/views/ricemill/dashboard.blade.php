@@ -17,8 +17,8 @@
 <div class="row g-3 mb-4">
     <div class="col-sm-6 col-lg-3">
         <div class="stat-card">
-            <div class="stat-icon" style="background:#e0eeff;">
-                <span class="iconify" data-icon="heroicons:inbox-stack" style="color:#1a3a5c;width:22px;height:22px;"></span>
+            <div class="stat-icon" style="background:#e8f5ee;">
+                <span class="iconify" data-icon="heroicons:inbox-stack" style="color:#1a5c38;width:22px;height:22px;"></span>
             </div>
             <div class="stat-value">{{ $stats['total_penerimaan'] }}</div>
             <div class="stat-label">Total Penerimaan Gabah</div>
@@ -56,8 +56,8 @@
     </div>
     <div class="col-sm-6 col-lg-3">
         <div class="stat-card">
-            <div class="stat-icon" style="background:#fde8ff;">
-                <span class="iconify" data-icon="heroicons:truck" style="color:#7b1fa2;width:22px;height:22px;"></span>
+            <div class="stat-icon" style="background:#e8f5e9;">
+                <span class="iconify" data-icon="heroicons:truck" style="color:#2e7d32;width:22px;height:22px;"></span>
             </div>
             <div class="stat-value">{{ $stats['total_pengiriman'] }}</div>
             <div class="stat-label">Pengiriman ke Packager</div>
@@ -172,7 +172,7 @@
                 </div>
 
                 <!-- Produksi Summary -->
-                <div style="background:#f5f8fc;border-radius:12px;padding:16px;border:1px solid var(--border);">
+                <div style="background:#f8faf8;border-radius:12px;padding:16px;border:1px solid var(--border);">
                     <div style="font-size:.78rem;color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">
                         Keuangan Bulan Ini
                     </div>
@@ -187,7 +187,7 @@
                     <div style="border-top:1px solid var(--border);margin:10px 0 10px;"></div>
                     <div class="d-flex justify-content-between align-items-center">
                         <span style="font-size:.88rem;font-weight:600;">Laba Bersih</span>
-                        <span style="font-weight:700;color:#1a3a5c;font-size:.95rem;">
+                        <span style="font-weight:700;color:#1a5c38;font-size:.95rem;">
                             Rp {{ number_format(($stats['pemasukan_bulan'] ?? 0) - ($stats['pengeluaran_bulan'] ?? 0), 0, ',', '.') }}
                         </span>
                     </div>

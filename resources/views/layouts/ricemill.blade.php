@@ -21,15 +21,15 @@
 
     <style>
         :root {
-            --primary:      #1a3a5c;
-            --primary-light:#2a5485;
-            --accent:       #e8a84b;
-            --accent2:      #3b82f6;
-            --bg-main:      #f0f4f8;
+            --primary:      #1a5c38;
+            --primary-light:#2d7a50;
+            --accent:       #e8b84b;
+            --accent2:      #e8b84b;
+            --bg-main:      #f4f6f3;
             --bg-card:      #ffffff;
-            --text-main:    #1c2733;
-            --text-muted:   #6b7c8e;
-            --border:       #dde3ea;
+            --text-main:    #1c2b1e;
+            --text-muted:   #6b7c6e;
+            --border:       #dde5de;
             --sidebar-w:    265px;
         }
 
@@ -49,7 +49,7 @@
             top: 0; left: 0;
             width: var(--sidebar-w);
             height: 100vh;
-            background: linear-gradient(175deg, #1a3a5c 0%, #0f2540 100%);
+            background: var(--primary);
             padding: 0;
             display: flex;
             flex-direction: column;
@@ -79,9 +79,9 @@
         .sidebar-logo .role-badge {
             display: inline-block;
             margin-top: 6px;
-            background: rgba(59,130,246,.25);
-            border: 1px solid rgba(59,130,246,.4);
-            color: #93c5fd;
+            background: rgba(255,255,255,.15);
+            border: 1px solid rgba(255,255,255,.2);
+            color: #fff;
             font-size: .68rem;
             font-weight: 500;
             padding: 2px 8px;
@@ -151,10 +151,9 @@
         }
 
         .nav-link.active {
-            background: rgba(59,130,246,.2);
+            background: rgba(255,255,255,.15);
             color: #fff;
             font-weight: 500;
-            border-left: 3px solid #3b82f6;
         }
 
         .nav-link .iconify { width: 20px; height: 20px; flex-shrink: 0; }
@@ -247,7 +246,7 @@
             top: 0; right: 0;
             width: 80px; height: 80px;
             border-radius: 50%;
-            background: rgba(59,130,246,.04);
+            background: rgba(22,163,74,.04);
             transform: translate(20px, -20px);
         }
 
@@ -366,7 +365,7 @@
 
         .badge-success-custom  { background:#e8f5ee; color:#1a5c38; }
         .badge-warning-custom  { background:#fef6e0; color:#a0720f; }
-        .badge-info-custom     { background:#e0f0ff; color:#1a5b8f; }
+        .badge-info-custom     { background:#e8f5e9; color:#2e7d32; }
         .badge-danger-custom   { background:#fde8e8; color:#8b1a1a; }
         .badge-purple-custom   { background:#f0e8ff; color:#5b21b6; }
 
@@ -440,7 +439,7 @@
             flex-shrink: 0;
         }
         .dot-menunggu { background: #f59e0b; }
-        .dot-diproses { background: #3b82f6; }
+        .dot-diproses { background: #16a34a; }
         .dot-selesai  { background: #16a34a; }
 
         @media (max-width: 768px) {

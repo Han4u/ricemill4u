@@ -35,8 +35,8 @@
     </div>
     <div class="col-sm-6 col-lg-3">
         <div class="stat-card">
-            <div class="stat-icon" style="background:#e0f0ff;">
-                <span class="iconify" data-icon="heroicons:archive-box" style="color:#1a5b8f;width:22px;height:22px;"></span>
+            <div class="stat-icon" style="background:#e8f5e9;">
+                <span class="iconify" data-icon="heroicons:archive-box" style="color:#2e7d32;width:22px;height:22px;"></span>
             </div>
             <div class="stat-value">{{ $stats['total_setoran'] }}</div>
             <div class="stat-label">Total Setoran</div>
@@ -44,8 +44,8 @@
     </div>
     <div class="col-sm-6 col-lg-3">
         <div class="stat-card">
-            <div class="stat-icon" style="background:#fde8ff;">
-                <span class="iconify" data-icon="heroicons:arrow-trending-up" style="color:#7b1fa2;width:22px;height:22px;"></span>
+            <div class="stat-icon" style="background:#e8f5ee;">
+                <span class="iconify" data-icon="heroicons:arrow-trending-up" style="color:#1a5c38;width:22px;height:22px;"></span>
             </div>
             <div class="stat-value" style="font-size:1.25rem;">
                 Rp {{ number_format($stats['pendapatan_bulan'], 0, ',', '.') }}

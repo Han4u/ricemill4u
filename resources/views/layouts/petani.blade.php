@@ -319,7 +319,7 @@
 
         .badge-success-custom  { background:#e8f5ee; color:#1a5c38; }
         .badge-warning-custom  { background:#fef6e0; color:#a0720f; }
-        .badge-info-custom     { background:#e0f0ff; color:#1a5b8f; }
+        .badge-info-custom     { background:#e8f5e9; color:#2e7d32; }
 
         /* ===== FORM ===== */
         .form-label-custom {

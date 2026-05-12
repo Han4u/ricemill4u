@@ -6,66 +6,102 @@ use App\Http\Controllers\Controller;
 use App\Models\PenerimaanGabah;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PenerimaanGabahController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $penerimaan = PenerimaanGabah::where('user_id', Auth::id())
-            ->latest()
-            ->paginate(10);
+        $query = PenerimaanGabah::where('user_id', Auth::id());
+
+        if ($request->filled('search')) {
+            $query->where('nama_petani', 'like', '%' . $request->search . '%')
+                  ->orWhere('asal_lahan', 'like', '%' . $request->search . '%');
+        }
+
+        $penerimaan = $query->latest('tanggal')->paginate(10)->withQueryString();
 
         return view('ricemill.penerimaan-gabah.index', compact('penerimaan'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('ricemill.penerimaan-gabah.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'nama_petani'    => 'required|string|max:255',
+            'asal_lahan'     => 'nullable|string|max:255',
+            'tanggal'        => 'required|date',
+            'jumlah_gabah'   => 'required|numeric|min:0.01',
+            'kualitas_gabah' => 'required|in:kering,basah,grade_a,grade_b',
+            'status'         => 'required|in:menunggu,diterima,diproses,selesai',
+            'bukti_foto'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'catatan'        => 'nullable|string',
+        ]);
+
+        $validated['user_id'] = Auth::id();
+
+        if ($request->hasFile('bukti_foto')) {
+            $validated['bukti_foto'] = $request->file('bukti_foto')->store('penerimaan', 'public');
+        }
+
+        PenerimaanGabah::create($validated);
+
+        return redirect()->route('ricemill.penerimaan-gabah.index')
+            ->with('success', 'Data penerimaan gabah berhasil dicatat!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(PenerimaanGabah $penerimaanGabah)
+    public function edit(PenerimaanGabah $penerimaan)
     {
-        //
+        abort_if($penerimaan->user_id !== Auth::id(), 403);
+        return view('ricemill.penerimaan-gabah.edit', compact('penerimaan'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(PenerimaanGabah $penerimaanGabah)
+    public function update(Request $request, PenerimaanGabah $penerimaan)
     {
-        //
+        abort_if($penerimaan->user_id !== Auth::id(), 403);
+
+        $validated = $request->validate([
+            'nama_petani'    => 'required|string|max:255',
+            'asal_lahan'     => 'nullable|string|max:255',
+            'tanggal'        => 'required|date',
+            'jumlah_gabah'   => 'required|numeric|min:0.01',
+            'kualitas_gabah' => 'required|in:kering,basah,grade_a,grade_b',
+            'status'         => 'required|in:menunggu,diterima,diproses,selesai',
+            'bukti_foto'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'catatan'        => 'nullable|string',
+        ]);
+
+        if ($request->hasFile('bukti_foto')) {
+            if ($penerimaan->bukti_foto) {
+                Storage::disk('public')->delete($penerimaan->bukti_foto);
+            }
+            $validated['bukti_foto'] = $request->file('bukti_foto')->store('penerimaan', 'public');
+        }
+
+        $penerimaan->update($validated);
+
+        return redirect()->route('ricemill.penerimaan-gabah.index')
+            ->with('success', 'Data penerimaan berhasil diperbarui!');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, PenerimaanGabah $penerimaanGabah)
+    public function destroy(PenerimaanGabah $penerimaan)
     {
-        //
-    }
+        abort_if($penerimaan->user_id !== Auth::id(), 403);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(PenerimaanGabah $penerimaanGabah)
-    {
-        //
+        if ($penerimaan->bukti_foto) {
+            Storage::disk('public')->delete($penerimaan->bukti_foto);
+        }
+
+        $penerimaan->delete();
+
+        return redirect()->route('ricemill.penerimaan-gabah.index')
+            ->with('success', 'Data penerimaan berhasil dihapus!');
     }
 }
