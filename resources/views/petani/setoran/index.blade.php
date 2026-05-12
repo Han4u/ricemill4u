@@ -6,7 +6,7 @@
 
 @section('topbar-actions')
     <a href="{{ route('petani.setoran.create') }}" class="btn-primary-custom">
-        <i data-lucide="plus" style="width:16px;height:16px;"></i> Tambah Setoran
+        <span class="iconify" data-icon="heroicons:plus" style="width:16px;height:16px;"></span> Tambah Setoran
     </a>
 @endsection
 
@@ -21,7 +21,7 @@
                 Rp {{ number_format($totalPendapatan, 0, ',', '.') }}
             </div>
         </div>
-        <i data-lucide="package" style="width:40px;height:40px;color:rgba(255,255,255,.3);"></i>
+        <span class="iconify" data-icon="heroicons:archive-box" style="width:40px;height:40px;color:rgba(255,255,255,.3);"></span>
     </div>
 </div>
 
@@ -78,14 +78,14 @@
                         <div class="d-flex gap-2">
                             <a href="{{ route('petani.setoran.edit', $setoran) }}"
                                class="btn-outline-custom" style="padding:6px 10px;">
-                                <i data-lucide="pencil" style="width:14px;height:14px;"></i>
+                                <span class="iconify" data-icon="heroicons:pencil" style="width:14px;height:14px;"></span>
                             </a>
                             <form action="{{ route('petani.setoran.destroy', $setoran) }}" method="POST"
                                   onsubmit="return confirm('Yakin hapus data setoran ini?')">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="btn-outline-custom"
                                         style="padding:6px 10px;color:#c0392b;border-color:#f5b8b8;">
-                                    <i data-lucide="trash-2" style="width:14px;height:14px;"></i>
+                                    <span class="iconify" data-icon="heroicons:trash" style="width:14px;height:14px;"></span>
                                 </button>
                             </form>
                         </div>
@@ -94,7 +94,7 @@
                 @empty
                 <tr>
                     <td colspan="7" style="text-align:center;padding:48px;color:var(--text-muted);">
-                        <i data-lucide="package" style="width:40px;height:40px;margin-bottom:12px;display:block;margin-inline:auto;"></i>
+                        <span class="iconify" data-icon="heroicons:archive-box" style="width:40px;height:40px;margin-bottom:12px;display:block;margin-inline:auto;"></span>
                         Belum ada data setoran.<br>
                         <a href="{{ route('petani.setoran.create') }}" style="color:var(--primary);font-weight:500;">
                             Tambah setoran pertamamu →

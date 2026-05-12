@@ -6,7 +6,7 @@
 
 @section('topbar-actions')
     <a href="{{ route('ricemill.penerimaan-gabah.create') }}" class="btn-primary-custom">
-        <i data-lucide="plus" style="width:16px;height:16px;"></i>
+        <span class="iconify" data-icon="heroicons:plus" style="width:16px;height:16px;"></span>
         Terima Gabah
     </a>
 @endsection
@@ -18,12 +18,12 @@
     <div class="col-sm-6 col-lg-3">
         <div class="stat-card">
             <div class="stat-icon" style="background:#e0eeff;">
-                <i data-lucide="inbox" style="color:#1a3a5c;width:22px;height:22px;"></i>
+                <span class="iconify" data-icon="heroicons:inbox-stack" style="color:#1a3a5c;width:22px;height:22px;"></span>
             </div>
             <div class="stat-value">{{ $stats['total_penerimaan'] }}</div>
             <div class="stat-label">Total Penerimaan Gabah</div>
             <div class="stat-trend neutral">
-                <i data-lucide="calendar" style="width:13px;height:13px;"></i>
+                <span class="iconify" data-icon="heroicons:calendar" style="width:13px;height:13px;"></span>
                 Bulan ini
             </div>
         </div>
@@ -31,12 +31,12 @@
     <div class="col-sm-6 col-lg-3">
         <div class="stat-card">
             <div class="stat-icon" style="background:#fff8e0;">
-                <i data-lucide="settings-2" style="color:#a0720f;width:22px;height:22px;"></i>
+                <span class="iconify" data-icon="heroicons:cog-6-tooth" style="color:#a0720f;width:22px;height:22px;"></span>
             </div>
             <div class="stat-value">{{ $stats['total_operasional'] }}</div>
             <div class="stat-label">Sesi Penggilingan</div>
             <div class="stat-trend neutral">
-                <i data-lucide="calendar" style="width:13px;height:13px;"></i>
+                <span class="iconify" data-icon="heroicons:calendar" style="width:13px;height:13px;"></span>
                 Bulan ini
             </div>
         </div>
@@ -44,12 +44,12 @@
     <div class="col-sm-6 col-lg-3">
         <div class="stat-card">
             <div class="stat-icon" style="background:#e8f5ee;">
-                <i data-lucide="trending-up" style="color:#1a5c38;width:22px;height:22px;"></i>
+                <span class="iconify" data-icon="heroicons:arrow-trending-up" style="color:#1a5c38;width:22px;height:22px;"></span>
             </div>
             <div class="stat-value">{{ number_format($stats['total_produksi_kg'], 0, ',', '.') }}</div>
             <div class="stat-label">Total Produksi Beras (kg)</div>
             <div class="stat-trend up">
-                <i data-lucide="arrow-up" style="width:13px;height:13px;"></i>
+                <span class="iconify" data-icon="heroicons:arrow-up" style="width:13px;height:13px;"></span>
                 Rendemen rata-rata {{ $stats['rendemen_rata'] }}%
             </div>
         </div>
@@ -57,12 +57,12 @@
     <div class="col-sm-6 col-lg-3">
         <div class="stat-card">
             <div class="stat-icon" style="background:#fde8ff;">
-                <i data-lucide="truck" style="color:#7b1fa2;width:22px;height:22px;"></i>
+                <span class="iconify" data-icon="heroicons:truck" style="color:#7b1fa2;width:22px;height:22px;"></span>
             </div>
             <div class="stat-value">{{ $stats['total_pengiriman'] }}</div>
             <div class="stat-label">Pengiriman ke Packager</div>
             <div class="stat-trend neutral">
-                <i data-lucide="clock" style="width:13px;height:13px;"></i>
+                <span class="iconify" data-icon="heroicons:clock" style="width:13px;height:13px;"></span>
                 {{ $stats['pengiriman_menunggu'] }} menunggu konfirmasi
             </div>
         </div>
@@ -229,7 +229,7 @@
                                 @php $rendemen = $prod->jumlah_gabah > 0 ? round(($prod->jumlah_beras / $prod->jumlah_gabah) * 100, 1) : 0; @endphp
                                 <span style="color:{{ $rendemen >= 60 ? '#1a5c38' : '#a0720f' }};font-weight:500;">{{ $rendemen }}%</span>
                                 @if($rendemen < 60)
-                                    <i data-lucide="alert-triangle" style="width:13px;height:13px;color:#a0720f;"></i>
+                                    <span class="iconify" data-icon="heroicons:exclamation-triangle" style="width:13px;height:13px;color:#a0720f;"></span>
                                 @endif
                             </td>
                             <td style="color:var(--text-muted);font-size:.82rem;">

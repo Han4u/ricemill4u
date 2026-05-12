@@ -6,7 +6,7 @@
 
 @section('topbar-actions')
 <button class="btn-primary-custom">
-    <i data-lucide="play-circle"></i> Mulai Proses Baru
+    <span class="iconify" data-icon="heroicons:play-circle"></span> Mulai Proses Baru
 </button>
 @endsection
 
@@ -47,14 +47,14 @@
                     </td>
                     <td>
                         <div class="d-flex gap-2">
-                            <button class="btn-outline-custom btn-sm"><i data-lucide="settings" style="width:14px;height:14px;"></i></button>
+                            <button class="btn-outline-custom btn-sm"><span class="iconify" data-icon="heroicons:adjustments-horizontal" style="width:14px;height:14px;"></span></button>
                         </div>
                     </td>
                 </tr>
                 @empty
                 <tr>
                     <td colspan="7" class="text-center py-5 text-muted">
-                        <i data-lucide="settings-2" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></i>
+                        <span class="iconify" data-icon="heroicons:cog-6-tooth" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></span>
                         <p>Belum ada data operasional.</p>
                     </td>
                 </tr>

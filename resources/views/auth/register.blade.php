@@ -10,8 +10,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
 
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <!-- Iconify (Heroicons) -->
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
 
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -449,7 +449,7 @@
     <!-- Brand -->
     <div class="brand-header">
         <div class="brand-icon">
-            <i data-lucide="sprout"></i>
+            <span class="iconify" data-icon="heroicons:sparkles" style="color:#fff; width:28px; height:28px;"></span>
         </div>
         <div class="brand-name">SiMonTani</div>
         <div class="brand-sub">Bergabunglah dengan ekosistem pertanian digital</div>
@@ -463,7 +463,7 @@
         {{-- Validation Error Summary --}}
         @if($errors->any())
             <div class="alert-danger-custom">
-                <i data-lucide="alert-circle"></i>
+                <span class="iconify" data-icon="heroicons:exclamation-circle"></span>
                 <span>{{ $errors->first() }}</span>
             </div>
         @endif
@@ -481,14 +481,14 @@
                                {{ old('role', 'petani') === 'petani' ? 'checked' : '' }}>
                         <label for="role-petani" class="role-label">
                             <div class="role-icon-box">
-                                <i data-lucide="sprout"></i>
+                                <span class="iconify" data-icon="heroicons:hand-raised"></span>
                             </div>
                             <div class="role-info">
                                 <div class="role-name">Petani</div>
                                 <div class="role-desc">Kelola lahan, panen, & setoran gabah</div>
                             </div>
                             <div class="role-check">
-                                <i data-lucide="check"></i>
+                                <span class="iconify" data-icon="heroicons:check"></span>
                             </div>
                         </label>
                     </div>
@@ -499,14 +499,14 @@
                                {{ old('role') === 'rice_mill' ? 'checked' : '' }}>
                         <label for="role-ricemill" class="role-label">
                             <div class="role-icon-box">
-                                <i data-lucide="factory"></i>
+                                <span class="iconify" data-icon="heroicons:building-office-2"></span>
                             </div>
                             <div class="role-info">
                                 <div class="role-name">Rice Mill</div>
                                 <div class="role-desc">Penerimaan gabah, produksi & distribusi</div>
                             </div>
                             <div class="role-check">
-                                <i data-lucide="check"></i>
+                                <span class="iconify" data-icon="heroicons:check"></span>
                             </div>
                         </label>
                     </div>
@@ -517,14 +517,14 @@
                                {{ old('role') === 'packager' ? 'checked' : '' }}>
                         <label for="role-packager" class="role-label">
                             <div class="role-icon-box">
-                                <i data-lucide="package"></i>
+                                <span class="iconify" data-icon="heroicons:archive-box"></span>
                             </div>
                             <div class="role-info">
                                 <div class="role-name">Packager</div>
                                 <div class="role-desc">Penerimaan beras, pengemasan & pesanan</div>
                             </div>
                             <div class="role-check">
-                                <i data-lucide="check"></i>
+                                <span class="iconify" data-icon="heroicons:check"></span>
                             </div>
                         </label>
                     </div>
@@ -538,7 +538,7 @@
             <div class="form-group">
                 <label class="field-label" for="name-input">Nama lengkap</label>
                 <div class="input-wrapper">
-                    <i data-lucide="user" class="input-icon"></i>
+                    <span class="iconify input-icon" data-icon="heroicons:user"></span>
                     <input id="name-input"
                            type="text"
                            name="name"
@@ -556,7 +556,7 @@
             <div class="form-group">
                 <label class="field-label" for="email-input">Email</label>
                 <div class="input-wrapper">
-                    <i data-lucide="mail" class="input-icon"></i>
+                    <span class="iconify input-icon" data-icon="heroicons:envelope"></span>
                     <input id="email-input"
                            type="email"
                            name="email"
@@ -574,7 +574,7 @@
             <div class="form-group">
                 <label class="field-label" for="password-input">Password</label>
                 <div class="input-wrapper">
-                    <i data-lucide="lock" class="input-icon"></i>
+                    <span class="iconify input-icon" data-icon="heroicons:lock-closed"></span>
                     <input id="password-input"
                            type="password"
                            name="password"
@@ -582,7 +582,7 @@
                            class="{{ $errors->has('password') ? 'is-invalid' : '' }}"
                            placeholder="Minimal 8 karakter">
                     <button type="button" class="toggle-password" onclick="togglePasswordVisibility('password-input', this)">
-                        <i data-lucide="eye"></i>
+                        <span class="iconify" data-icon="heroicons:eye"></span>
                     </button>
                 </div>
                 <div class="password-strength">
@@ -598,21 +598,21 @@
             <div class="form-group">
                 <label class="field-label" for="password-confirm-input">Konfirmasi Password</label>
                 <div class="input-wrapper">
-                    <i data-lucide="lock" class="input-icon"></i>
+                    <span class="iconify input-icon" data-icon="heroicons:lock-closed"></span>
                     <input id="password-confirm-input"
                            type="password"
                            name="password_confirmation"
                            required
                            placeholder="Ulangi password">
                     <button type="button" class="toggle-password" onclick="togglePasswordVisibility('password-confirm-input', this)">
-                        <i data-lucide="eye"></i>
+                        <span class="iconify" data-icon="heroicons:eye"></span>
                     </button>
                 </div>
             </div>
 
             <!-- Submit -->
             <button type="submit" class="btn-submit" id="register-btn">
-                <i data-lucide="user-plus"></i>
+                <span class="iconify" data-icon="heroicons:user-plus"></span>
                 Daftar sekarang
             </button>
         </form>
@@ -630,19 +630,16 @@
 </div>
 
 <script>
-    lucide.createIcons();
-
     function togglePasswordVisibility(inputId, btn) {
         const input = document.getElementById(inputId);
-        const icon = btn.querySelector('i');
+        const icon = btn.querySelector('.iconify');
         if (input.type === 'password') {
             input.type = 'text';
-            icon.setAttribute('data-lucide', 'eye-off');
+            icon.setAttribute('data-icon', 'heroicons:eye-slash');
         } else {
             input.type = 'password';
-            icon.setAttribute('data-lucide', 'eye');
+            icon.setAttribute('data-icon', 'heroicons:eye');
         }
-        lucide.createIcons();
     }
 
     // Password strength indicator

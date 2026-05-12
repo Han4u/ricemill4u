@@ -6,7 +6,7 @@
 
 @section('topbar-actions')
 <a href="{{ route('ricemill.penerimaan-gabah.create') }}" class="btn-primary-custom">
-    <i data-lucide="plus-circle"></i> Tambah Penerimaan
+    <span class="iconify" data-icon="heroicons:plus-circle"></span> Tambah Penerimaan
 </a>
 @endsection
 
@@ -15,8 +15,8 @@
     <div class="card-header-clean">
         <h5>Daftar Penerimaan Gabah</h5>
         <div class="d-flex gap-2">
-            <button class="btn-outline-custom btn-sm"><i data-lucide="filter"></i> Filter</button>
-            <button class="btn-outline-custom btn-sm"><i data-lucide="download"></i> Export</button>
+            <button class="btn-outline-custom btn-sm"><span class="iconify" data-icon="heroicons:funnel"></span> Filter</button>
+            <button class="btn-outline-custom btn-sm"><span class="iconify" data-icon="heroicons:arrow-down-tray"></span> Export</button>
         </div>
     </div>
     <div class="table-responsive">
@@ -48,7 +48,7 @@
                     <td>
                         <div class="d-flex gap-2">
                             <a href="#" class="btn-outline-custom btn-sm" title="Detail">
-                                <i data-lucide="eye" style="width:14px;height:14px;"></i>
+                                <span class="iconify" data-icon="heroicons:eye" style="width:14px;height:14px;"></span>
                             </a>
                         </div>
                     </td>
@@ -56,7 +56,7 @@
                 @empty
                 <tr>
                     <td colspan="7" class="text-center py-5 text-muted">
-                        <i data-lucide="inbox" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></i>
+                        <span class="iconify" data-icon="heroicons:inbox-stack" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></span>
                         <p>Belum ada data penerimaan gabah.</p>
                     </td>
                 </tr>

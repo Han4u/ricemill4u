@@ -13,8 +13,8 @@
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <!-- Iconify (Heroicons) -->
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -157,7 +157,7 @@
             border-left: 3px solid #3b82f6;
         }
 
-        .nav-link i { width: 18px; height: 18px; flex-shrink: 0; }
+        .nav-link .iconify { width: 20px; height: 20px; flex-shrink: 0; }
 
         .sidebar-footer {
             padding: 16px 12px;
@@ -475,35 +475,35 @@
         <div class="nav-section-label">Utama</div>
         <a href="{{ route('ricemill.dashboard') }}"
            class="nav-link {{ request()->routeIs('ricemill.dashboard') ? 'active' : '' }}">
-            <i data-lucide="layout-dashboard"></i> Dashboard
+            <span class="iconify" data-icon="heroicons:squares-2x2"></span> Dashboard
         </a>
 
         <div class="nav-section-label">Penerimaan Gabah</div>
         <a href="{{ route('ricemill.penerimaan-gabah.index') }}"
            class="nav-link {{ request()->routeIs('ricemill.penerimaan-gabah.*') ? 'active' : '' }}">
-            <i data-lucide="inbox"></i> Penerimaan Gabah
+            <span class="iconify" data-icon="heroicons:inbox-stack"></span> Penerimaan Gabah
         </a>
 
         <div class="nav-section-label">Operasional</div>
         <a href="{{ route('ricemill.operasional.index') }}"
            class="nav-link {{ request()->routeIs('ricemill.operasional.*') ? 'active' : '' }}">
-            <i data-lucide="settings-2"></i> Operasional Penggilingan
+            <span class="iconify" data-icon="heroicons:cog-6-tooth"></span> Operasional Penggilingan
         </a>
         <a href="{{ route('ricemill.produksi.index') }}"
            class="nav-link {{ request()->routeIs('ricemill.produksi.*') ? 'active' : '' }}">
-            <i data-lucide="trending-up"></i> Riwayat Produksi
+            <span class="iconify" data-icon="heroicons:arrow-trending-up"></span> Riwayat Produksi
         </a>
 
         <div class="nav-section-label">Distribusi</div>
         <a href="{{ route('ricemill.pengiriman.index') }}"
            class="nav-link {{ request()->routeIs('ricemill.pengiriman.*') ? 'active' : '' }}">
-            <i data-lucide="truck"></i> Pengiriman Beras
+            <span class="iconify" data-icon="heroicons:truck"></span> Pengiriman Beras
         </a>
 
         <div class="nav-section-label">Keuangan</div>
         <a href="{{ route('ricemill.keuangan.index') }}"
            class="nav-link {{ request()->routeIs('ricemill.keuangan.*') ? 'active' : '' }}">
-            <i data-lucide="bar-chart-2"></i> Laporan Keuangan
+            <span class="iconify" data-icon="heroicons:presentation-chart-bar"></span> Laporan Keuangan
         </a>
     </nav>
 
@@ -511,7 +511,7 @@
         <form action="{{ route('logout') }}" method="POST">
             @csrf
             <button type="submit" class="nav-link w-100" style="background:none;border:none;cursor:pointer;text-align:left;">
-                <i data-lucide="log-out"></i> Keluar
+                <span class="iconify" data-icon="heroicons:arrow-left-on-rectangle"></span> Keluar
             </button>
         </form>
     </div>
@@ -532,14 +532,14 @@
     <div class="content-area">
         @if(session('success'))
         <div class="alert-clean alert-success-clean mb-4">
-            <i data-lucide="check-circle" style="width:18px;height:18px;"></i>
+            <span class="iconify" data-icon="heroicons:check-circle" style="width:20px;height:20px;"></span>
             {{ session('success') }}
         </div>
         @endif
 
         @if(session('error'))
         <div class="alert-clean alert-danger-clean mb-4">
-            <i data-lucide="x-circle" style="width:18px;height:18px;"></i>
+            <span class="iconify" data-icon="heroicons:x-circle" style="width:20px;height:20px;"></span>
             {{ session('error') }}
         </div>
         @endif
@@ -549,7 +549,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>lucide.createIcons();</script>
+<script></script>
 @stack('scripts')
 </body>
 </html>

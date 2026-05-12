@@ -48,8 +48,12 @@
                     </div>
 
                     <div class="d-flex gap-2 justify-content-end">
-                        <a href="{{ route('ricemill.penerimaan-gabah.index') }}" class="btn-outline-custom">Batal</a>
-                        <button type="submit" class="btn-primary-custom">Simpan Data</button>
+                        <a href="{{ route('ricemill.penerimaan-gabah.index') }}" class="btn-outline-custom">
+                            <span class="iconify" data-icon="heroicons:x-mark"></span> Batal
+                        </a>
+                        <button type="submit" class="btn-primary-custom">
+                            <span class="iconify" data-icon="heroicons:check"></span> Simpan Data
+                        </button>
                     </div>
                 </form>
             </div>

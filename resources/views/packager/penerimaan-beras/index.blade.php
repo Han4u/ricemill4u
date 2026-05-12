@@ -6,7 +6,7 @@
 
 @section('topbar-actions')
 <a href="{{ route('packager.penerimaan-beras.create') }}" class="btn-primary-custom">
-    <i data-lucide="plus-circle"></i> Terima Beras
+    <span class="iconify" data-icon="heroicons:plus-circle"></span> Terima Beras
 </a>
 @endsection
 
@@ -40,13 +40,13 @@
                         <span class="badge-custom badge-success-custom">Diverifikasi</span>
                     </td>
                     <td>
-                        <button class="btn-outline-custom btn-sm"><i data-lucide="eye" style="width:14px;height:14px;"></i></button>
+                        <button class="btn-outline-custom btn-sm"><span class="iconify" data-icon="heroicons:eye" style="width:14px;height:14px;"></span></button>
                     </td>
                 </tr>
                 @empty
                 <tr>
                     <td colspan="7" class="text-center py-5 text-muted">
-                        <i data-lucide="inbox" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></i>
+                        <span class="iconify" data-icon="heroicons:inbox-stack" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></span>
                         <p>Belum ada data penerimaan beras.</p>
                     </td>
                 </tr>

@@ -9,7 +9,7 @@
     <div class="col-md-4">
         <div class="stat-card">
             <div class="stat-icon" style="background: rgba(22, 163, 74, 0.1); color: #16a34a;">
-                <i data-lucide="package"></i>
+                <span class="iconify" data-icon="heroicons:archive-box"></span>
             </div>
             <div class="stat-value">{{ number_format($produksi->sum('jumlah_beras'), 0, ',', '.') }} Kg</div>
             <div class="stat-label">Total Produksi Beras</div>
@@ -18,7 +18,7 @@
     <div class="col-md-4">
         <div class="stat-card">
             <div class="stat-icon" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;">
-                <i data-lucide="percent"></i>
+                <span class="iconify" data-icon="heroicons:receipt-percent"></span>
             </div>
             @php
                 $totalGabah = $produksi->sum('jumlah_gabah');
@@ -63,13 +63,13 @@
                     </td>
                     <td><span class="badge-custom badge-info-custom">{{ $item->kualitas ?? 'Premium' }}</span></td>
                     <td>
-                        <button class="btn-outline-custom btn-sm"><i data-lucide="printer" style="width:14px;height:14px;"></i></button>
+                        <button class="btn-outline-custom btn-sm"><span class="iconify" data-icon="heroicons:printer" style="width:14px;height:14px;"></span></button>
                     </td>
                 </tr>
                 @empty
                 <tr>
                     <td colspan="7" class="text-center py-5 text-muted">
-                        <i data-lucide="trending-up" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></i>
+                        <span class="iconify" data-icon="heroicons:arrow-trending-up" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></span>
                         <p>Belum ada data riwayat produksi.</p>
                     </td>
                 </tr>

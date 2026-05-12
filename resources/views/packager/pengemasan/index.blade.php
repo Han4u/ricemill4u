@@ -6,7 +6,7 @@
 
 @section('topbar-actions')
 <button class="btn-primary-custom">
-    <i data-lucide="package-plus"></i> Catat Pengemasan
+    <span class="iconify" data-icon="heroicons:plus-circle"></span> Catat Pengemasan
 </button>
 @endsection
 
@@ -15,7 +15,7 @@
     <div class="col-md-4">
         <div class="stat-card">
             <div class="stat-icon" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">
-                <i data-lucide="package"></i>
+                <span class="iconify" data-icon="heroicons:cube"></span>
             </div>
             <div class="stat-value">{{ number_format($pengemasan->count(), 0, ',', '.') }}</div>
             <div class="stat-label">Total Batch Kemasan</div>
@@ -50,13 +50,13 @@
                     <td>{{ number_format($item->total_berat, 0, ',', '.') }} Kg</td>
                     <td>{{ $item->merek ?? 'Beras Kita' }}</td>
                     <td>
-                        <button class="btn-outline-custom btn-sm"><i data-lucide="printer" style="width:14px;height:14px;"></i></button>
+                        <button class="btn-outline-custom btn-sm"><span class="iconify" data-icon="heroicons:printer" style="width:14px;height:14px;"></span></button>
                     </td>
                 </tr>
                 @empty
                 <tr>
                     <td colspan="7" class="text-center py-5 text-muted">
-                        <i data-lucide="package-2" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></i>
+                        <span class="iconify" data-icon="heroicons:cube" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></span>
                         <p>Belum ada data pengemasan.</p>
                     </td>
                 </tr>

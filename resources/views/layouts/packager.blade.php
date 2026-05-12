@@ -13,8 +13,8 @@
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <!-- Iconify (Heroicons) -->
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -157,7 +157,7 @@
             border-left: 3px solid #8b5cf6;
         }
 
-        .nav-link i { width: 18px; height: 18px; flex-shrink: 0; }
+        .nav-link .iconify { width: 20px; height: 20px; flex-shrink: 0; }
 
         .sidebar-footer {
             padding: 16px 12px;
@@ -454,25 +454,25 @@
         <div class="nav-section-label">Utama</div>
         <a href="{{ route('packager.dashboard') }}"
            class="nav-link {{ request()->routeIs('packager.dashboard') ? 'active' : '' }}">
-            <i data-lucide="layout-dashboard"></i> Dashboard
+            <span class="iconify" data-icon="heroicons:squares-2x2"></span> Dashboard
         </a>
 
         <div class="nav-section-label">Penerimaan</div>
         <a href="{{ route('packager.penerimaan-beras.index') }}"
            class="nav-link {{ request()->routeIs('packager.penerimaan-beras.*') ? 'active' : '' }}">
-            <i data-lucide="inbox"></i> Penerimaan Beras Putih
+            <span class="iconify" data-icon="heroicons:inbox-stack"></span> Penerimaan Beras Putih
         </a>
 
         <div class="nav-section-label">Pengemasan</div>
         <a href="{{ route('packager.pengemasan.index') }}"
            class="nav-link {{ request()->routeIs('packager.pengemasan.*') ? 'active' : '' }}">
-            <i data-lucide="package-2"></i> Hasil Pengemasan
+            <span class="iconify" data-icon="heroicons:cube"></span> Hasil Pengemasan
         </a>
 
         <div class="nav-section-label">Pesanan</div>
         <a href="{{ route('packager.pesanan.index') }}"
            class="nav-link {{ request()->routeIs('packager.pesanan.*') ? 'active' : '' }}">
-            <i data-lucide="shopping-cart"></i> Pesanan Masuk
+            <span class="iconify" data-icon="heroicons:shopping-cart"></span> Pesanan Masuk
         </a>
     </nav>
 
@@ -480,7 +480,7 @@
         <form action="{{ route('logout') }}" method="POST">
             @csrf
             <button type="submit" class="nav-link w-100" style="background:none;border:none;cursor:pointer;text-align:left;">
-                <i data-lucide="log-out"></i> Keluar
+                <span class="iconify" data-icon="heroicons:arrow-left-on-rectangle"></span> Keluar
             </button>
         </form>
     </div>
@@ -501,14 +501,14 @@
     <div class="content-area">
         @if(session('success'))
         <div class="alert-clean alert-success-clean mb-4">
-            <i data-lucide="check-circle" style="width:18px;height:18px;"></i>
+            <span class="iconify" data-icon="heroicons:check-circle" style="width:20px;height:20px;"></span>
             {{ session('success') }}
         </div>
         @endif
 
         @if(session('error'))
         <div class="alert-clean alert-danger-clean mb-4">
-            <i data-lucide="x-circle" style="width:18px;height:18px;"></i>
+            <span class="iconify" data-icon="heroicons:x-circle" style="width:20px;height:20px;"></span>
             {{ session('error') }}
         </div>
         @endif
@@ -518,7 +518,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>lucide.createIcons();</script>
+<script></script>
 @stack('scripts')
 </body>
 </html>

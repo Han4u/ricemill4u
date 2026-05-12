@@ -6,7 +6,7 @@
 
 @section('topbar-actions')
     <a href="{{ route('packager.penerimaan-beras.create') }}" class="btn-primary-custom">
-        <i data-lucide="plus" style="width:16px;height:16px;"></i>
+        <span class="iconify" data-icon="heroicons:plus" style="width:16px;height:16px;"></span>
         Terima Beras
     </a>
 @endsection
@@ -18,12 +18,12 @@
     <div class="col-sm-6 col-lg-3">
         <div class="stat-card">
             <div class="stat-icon" style="background:#f0e8ff;">
-                <i data-lucide="inbox" style="color:#4f2d87;width:22px;height:22px;"></i>
+                <span class="iconify" data-icon="heroicons:inbox-stack" style="color:#4f2d87;width:22px;height:22px;"></span>
             </div>
             <div class="stat-value">{{ $stats['total_penerimaan'] }}</div>
             <div class="stat-label">Penerimaan Beras</div>
             <div class="stat-trend neutral">
-                <i data-lucide="calendar" style="width:13px;height:13px;"></i>
+                <span class="iconify" data-icon="heroicons:calendar" style="width:13px;height:13px;"></span>
                 Bulan ini
             </div>
         </div>
@@ -31,12 +31,12 @@
     <div class="col-sm-6 col-lg-3">
         <div class="stat-card">
             <div class="stat-icon" style="background:#e8f5ee;">
-                <i data-lucide="package-2" style="color:#1a5c38;width:22px;height:22px;"></i>
+                <span class="iconify" data-icon="heroicons:cube" style="color:#1a5c38;width:22px;height:22px;"></span>
             </div>
             <div class="stat-value">{{ number_format($stats['total_kemasan'], 0, ',', '.') }}</div>
             <div class="stat-label">Total Kemasan Diproduksi</div>
             <div class="stat-trend up">
-                <i data-lucide="trending-up" style="width:13px;height:13px;"></i>
+                <span class="iconify" data-icon="heroicons:arrow-trending-up" style="width:13px;height:13px;"></span>
                 Efisiensi {{ $stats['efisiensi'] }}%
             </div>
         </div>
@@ -44,12 +44,12 @@
     <div class="col-sm-6 col-lg-3">
         <div class="stat-card">
             <div class="stat-icon" style="background:#fff8e0;">
-                <i data-lucide="shopping-cart" style="color:#a0720f;width:22px;height:22px;"></i>
+                <span class="iconify" data-icon="heroicons:shopping-cart" style="color:#a0720f;width:22px;height:22px;"></span>
             </div>
             <div class="stat-value">{{ $stats['total_pesanan'] }}</div>
             <div class="stat-label">Pesanan Masuk</div>
             <div class="stat-trend neutral">
-                <i data-lucide="clock" style="width:13px;height:13px;"></i>
+                <span class="iconify" data-icon="heroicons:clock" style="width:13px;height:13px;"></span>
                 {{ $stats['pesanan_pending'] }} belum diproses
             </div>
         </div>
@@ -57,14 +57,14 @@
     <div class="col-sm-6 col-lg-3">
         <div class="stat-card">
             <div class="stat-icon" style="background:#fde8ff;">
-                <i data-lucide="bar-chart-2" style="color:#7b1fa2;width:22px;height:22px;"></i>
+                <span class="iconify" data-icon="heroicons:presentation-chart-bar" style="color:#7b1fa2;width:22px;height:22px;"></span>
             </div>
             <div class="stat-value" style="font-size:1.25rem;">
                 Rp {{ number_format($stats['omzet_bulan'] ?? 0, 0, ',', '.') }}
             </div>
             <div class="stat-label">Omzet Bulan Ini</div>
             <div class="stat-trend up">
-                <i data-lucide="arrow-up" style="width:13px;height:13px;"></i>
+                <span class="iconify" data-icon="heroicons:arrow-up" style="width:13px;height:13px;"></span>
                 Dari {{ $stats['total_pesanan'] }} pesanan
             </div>
         </div>

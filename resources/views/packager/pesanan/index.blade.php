@@ -40,13 +40,13 @@
                         @endif
                     </td>
                     <td>
-                        <button class="btn-outline-custom btn-sm" title="Proses"><i data-lucide="check-circle" style="width:14px;height:14px;"></i></button>
+                        <button class="btn-outline-custom btn-sm" title="Proses"><span class="iconify" data-icon="heroicons:check-circle" style="width:14px;height:14px;"></span></button>
                     </td>
                 </tr>
                 @empty
                 <tr>
                     <td colspan="7" class="text-center py-5 text-muted">
-                        <i data-lucide="shopping-cart" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></i>
+                        <span class="iconify" data-icon="heroicons:shopping-cart" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></span>
                         <p>Belum ada pesanan masuk.</p>
                     </td>
                 </tr>

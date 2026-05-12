@@ -6,7 +6,7 @@
 
 @section('topbar-actions')
 <button class="btn-primary-custom">
-    <i data-lucide="truck"></i> Buat Pengiriman
+    <span class="iconify" data-icon="heroicons:truck"></span> Buat Pengiriman
 </button>
 @endsection
 
@@ -46,13 +46,13 @@
                         @endif
                     </td>
                     <td>
-                        <button class="btn-outline-custom btn-sm" title="Tracking"><i data-lucide="map-pin" style="width:14px;height:14px;"></i></button>
+                        <button class="btn-outline-custom btn-sm" title="Tracking"><span class="iconify" data-icon="heroicons:map-pin" style="width:14px;height:14px;"></span></button>
                     </td>
                 </tr>
                 @empty
                 <tr>
                     <td colspan="7" class="text-center py-5 text-muted">
-                        <i data-lucide="truck" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></i>
+                        <span class="iconify" data-icon="heroicons:truck" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></span>
                         <p>Belum ada data pengiriman.</p>
                     </td>
                 </tr>

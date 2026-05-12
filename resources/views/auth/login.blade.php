@@ -10,8 +10,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
 
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <!-- Iconify (Heroicons) -->
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
 
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -352,7 +352,7 @@
     <!-- Brand -->
     <div class="brand-header">
         <div class="brand-icon">
-            <i data-lucide="sprout"></i>
+            <span class="iconify" data-icon="heroicons:sparkles" style="color:#fff; width:28px; height:28px;"></span>
         </div>
         <div class="brand-name">SiMonTani</div>
         <div class="brand-sub">Sistem Monitoring Pertanian Terpadu</div>
@@ -365,7 +365,7 @@
 
         @if(session('status'))
             <div class="alert-danger-custom" style="background:#e8f5ee;border-color:#b2dcc4;color:#1a5c38;">
-                <i data-lucide="check-circle"></i>
+                <span class="iconify" data-icon="heroicons:check-circle"></span>
                 {{ session('status') }}
             </div>
         @endif
@@ -377,7 +377,7 @@
             <div class="form-group">
                 <label for="email-input">Email</label>
                 <div class="input-wrapper">
-                    <i data-lucide="mail" class="input-icon"></i>
+                    <span class="iconify input-icon" data-icon="heroicons:envelope"></span>
                     <input id="email-input"
                            type="email"
                            name="email"
@@ -395,7 +395,7 @@
             <div class="form-group">
                 <label for="password-input">Password</label>
                 <div class="input-wrapper">
-                    <i data-lucide="lock" class="input-icon"></i>
+                    <span class="iconify input-icon" data-icon="heroicons:lock-closed"></span>
                     <input id="password-input"
                            type="password"
                            name="password"
@@ -403,7 +403,7 @@
                            class="{{ $errors->has('password') ? 'is-invalid' : '' }}"
                            placeholder="Masukkan password">
                     <button type="button" class="toggle-password" onclick="togglePasswordVisibility('password-input', this)">
-                        <i data-lucide="eye"></i>
+                        <span class="iconify" data-icon="heroicons:eye"></span>
                     </button>
                 </div>
                 @error('password')
@@ -424,7 +424,7 @@
 
             <!-- Submit -->
             <button type="submit" class="btn-submit" id="login-btn">
-                <i data-lucide="log-in"></i>
+                <span class="iconify" data-icon="heroicons:arrow-right-on-rectangle"></span>
                 Masuk
             </button>
         </form>
@@ -442,19 +442,16 @@
 </div>
 
 <script>
-    lucide.createIcons();
-
     function togglePasswordVisibility(inputId, btn) {
         const input = document.getElementById(inputId);
-        const icon = btn.querySelector('i');
+        const icon = btn.querySelector('.iconify');
         if (input.type === 'password') {
             input.type = 'text';
-            icon.setAttribute('data-lucide', 'eye-off');
+            icon.setAttribute('data-icon', 'heroicons:eye-slash');
         } else {
             input.type = 'password';
-            icon.setAttribute('data-lucide', 'eye');
+            icon.setAttribute('data-icon', 'heroicons:eye');
         }
-        lucide.createIcons();
     }
 </script>
 

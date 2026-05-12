@@ -6,7 +6,7 @@
 
 @section('topbar-actions')
     <a href="{{ route('petani.lahan.create') }}" class="btn-primary-custom">
-        <i data-lucide="plus" style="width:16px;height:16px;"></i> Tambah Lahan
+        <span class="iconify" data-icon="heroicons:plus" style="width:16px;height:16px;"></span> Tambah Lahan
     </a>
 @endsection
 
@@ -44,7 +44,7 @@
             </div>
             <div class="col-md-1">
                 <button type="submit" class="btn-primary-custom w-100" style="justify-content:center;">
-                    <i data-lucide="search" style="width:16px;height:16px;"></i>
+                    <span class="iconify" data-icon="heroicons:magnifying-glass" style="width:16px;height:16px;"></span>
                 </button>
             </div>
         </form>
@@ -76,7 +76,7 @@
                             @else
                                 <div style="width:40px;height:40px;border-radius:10px;
                                             background:#e8f5ee;display:flex;align-items:center;justify-content:center;">
-                                    <i data-lucide="map" style="width:18px;color:#1a5c38;"></i>
+                                    <span class="iconify" data-icon="heroicons:map" style="width:18px;color:#1a5c38;"></span>
                                 </div>
                             @endif
                             <span style="font-weight:500;">{{ $lahan->nama_lahan }}</span>
@@ -94,18 +94,18 @@
                         <div class="d-flex gap-2">
                             <a href="{{ route('petani.lahan.show', $lahan) }}"
                                class="btn-outline-custom" style="padding:6px 10px;">
-                                <i data-lucide="eye" style="width:14px;height:14px;"></i>
+                                <span class="iconify" data-icon="heroicons:eye" style="width:14px;height:14px;"></span>
                             </a>
                             <a href="{{ route('petani.lahan.edit', $lahan) }}"
                                class="btn-outline-custom" style="padding:6px 10px;">
-                                <i data-lucide="pencil" style="width:14px;height:14px;"></i>
+                                <span class="iconify" data-icon="heroicons:pencil" style="width:14px;height:14px;"></span>
                             </a>
                             <form action="{{ route('petani.lahan.destroy', $lahan) }}" method="POST"
                                   onsubmit="return confirm('Yakin ingin menghapus lahan ini?')">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="btn-outline-custom"
                                         style="padding:6px 10px;color:#c0392b;border-color:#f5b8b8;">
-                                    <i data-lucide="trash-2" style="width:14px;height:14px;"></i>
+                                    <span class="iconify" data-icon="heroicons:trash" style="width:14px;height:14px;"></span>
                                 </button>
                             </form>
                         </div>
@@ -114,7 +114,7 @@
                 @empty
                 <tr>
                     <td colspan="6" style="text-align:center;padding:48px;color:var(--text-muted);">
-                        <i data-lucide="map" style="width:40px;height:40px;margin-bottom:12px;display:block;margin-inline:auto;"></i>
+                        <span class="iconify" data-icon="heroicons:map" style="width:40px;height:40px;margin-bottom:12px;display:block;margin-inline:auto;"></span>
                         Belum ada lahan yang terdaftar.<br>
                         <a href="{{ route('petani.lahan.create') }}" style="color:var(--primary);font-weight:500;">
                             Tambah lahan pertamamu →
