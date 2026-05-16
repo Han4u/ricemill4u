@@ -89,9 +89,10 @@
         .brand-icon i, .brand-icon svg { color: #fff; width: 28px; height: 28px; }
 
         .brand-name {
-            font-family: 'DM Serif Display', serif;
+            font-family: 'DM Sans', sans-serif;
             font-size: 1.65rem;
-            color: var(--text-main);
+            font-weight: 700;
+            color: var(--primary);
             letter-spacing: .01em;
         }
 
@@ -352,7 +353,7 @@
     <!-- Brand -->
     <div class="brand-header">
         <div class="brand-icon">
-            <span class="iconify" data-icon="heroicons:sparkles" style="color:#fff; width:28px; height:28px;"></span>
+            <span class="iconify" data-icon="ph:plant" style="color:#fff; width:28px; height:28px;"></span>
         </div>
         <div class="brand-name">SiMonTani</div>
         <div class="brand-sub">Sistem Monitoring Pertanian Terpadu</div>
@@ -361,7 +362,7 @@
     <!-- Login Card -->
     <div class="auth-card" id="login-card">
         <h2 class="auth-card-title">Masuk ke akun Anda</h2>
-        <p class="auth-card-subtitle">Akses dashboard sesuai peran Anda</p>
+        <p class="auth-card-subtitle">Akses dashboard sesuai peran Anda.</p>
 
         @if(session('status'))
             <div class="alert-danger-custom" style="background:#e8f5ee;border-color:#b2dcc4;color:#1a5c38;">
@@ -411,31 +412,14 @@
                 @enderror
             </div>
 
-            <!-- Remember & Forgot -->
-            <div class="remember-row">
-                <label>
-                    <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
-                    Ingat saya
-                </label>
-                @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}" class="forgot-link">Lupa password?</a>
-                @endif
-            </div>
-
             <!-- Submit -->
-            <button type="submit" class="btn-submit" id="login-btn">
-                <span class="iconify" data-icon="heroicons:arrow-right-on-rectangle"></span>
+            <button type="submit" class="btn-submit" id="login-btn" style="margin-top: 24px;">
                 Masuk
             </button>
         </form>
 
-        <!-- Divider -->
-        <div class="auth-divider">
-            <span>atau</span>
-        </div>
-
         <!-- Footer -->
-        <div class="auth-footer">
+        <div class="auth-footer" style="margin-top: 20px;">
             Belum punya akun? <a href="{{ route('register') }}">Daftar sekarang</a>
         </div>
     </div>

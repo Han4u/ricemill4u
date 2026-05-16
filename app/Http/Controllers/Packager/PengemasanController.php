@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Packager;
 
 use App\Http\Controllers\Controller;
+use App\Models\PenerimaanBeras;
 use App\Models\HasilPengemasan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

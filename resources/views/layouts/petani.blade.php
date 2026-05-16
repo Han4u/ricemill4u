@@ -387,7 +387,10 @@
 
 <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
-        <div class="brand">🌾 Rice Mill</div>
+        <div class="brand flex items-center gap-2" style="display:flex; align-items:center; gap:8px;">
+            <span class="iconify text-[#10b981]" data-icon="heroicons:hand-raised" style="width:24px; height:24px;"></span>
+            SiMonTani
+        </div>
         <div class="sub">Management System</div>
     </div>
 
@@ -426,9 +429,9 @@
     </nav>
 
     <div class="sidebar-footer">
-        <form action="{{ route('logout') }}" method="POST">
+        <form id="logout-form" action="{{ route('logout') }}" method="POST">
             @csrf
-            <button type="submit" class="nav-link w-100" style="background:none;border:none;cursor:pointer;text-align:left;">
+            <button type="button" onclick="confirmLogout()" class="nav-link w-100" style="background:none;border:none;cursor:pointer;text-align:left;">
                 <span class="iconify" data-icon="heroicons:arrow-left-on-rectangle"></span> Keluar
             </button>
         </form>
@@ -438,9 +441,14 @@
 <div class="main-content">
 
     <div class="topbar">
-        <div>
-            <h1 class="page-title">@yield('page-title', 'Dashboard')</h1>
-            <nav class="breadcrumb">@yield('breadcrumb', 'Home')</nav>
+        <div class="d-flex align-items-center gap-3">
+            <button class="btn btn-light d-md-none p-1 border-0 shadow-sm" id="mobileMenuBtn" style="background:#fff;">
+                <span class="iconify text-slate-700" data-icon="heroicons:bars-3" style="width:24px;height:24px;"></span>
+            </button>
+            <div>
+                <h1 class="page-title">@yield('page-title', 'Dashboard')</h1>
+                <nav class="breadcrumb">@yield('breadcrumb', 'Home')</nav>
+            </div>
         </div>
         <div class="d-flex align-items-center gap-3">
             @yield('topbar-actions')
@@ -467,7 +475,35 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const mobileBtn = document.getElementById('mobileMenuBtn');
+        const sidebar = document.getElementById('sidebar');
+        if(mobileBtn && sidebar) {
+            mobileBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('open');
+            });
+        }
+    });
+
+    function confirmLogout() {
+        Swal.fire({
+            title: 'Yakin ingin keluar?',
+            text: "Sesi Anda akan diakhiri.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#1a5c38',
+            cancelButtonColor: '#dc3545',
+            confirmButtonText: 'Ya, Keluar',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('logout-form').submit();
+            }
+        });
+    }
+</script>
 @stack('scripts')
 </body>
 </html>
