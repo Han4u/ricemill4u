@@ -4,6 +4,7 @@ namespace App\Http\Controllers\RiceMill;
 
 use App\Http\Controllers\Controller;
 use App\Models\RiwayatProduksi;
+use App\Models\OperasionalPenggilingan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

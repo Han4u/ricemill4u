@@ -89,9 +89,10 @@
         .brand-icon i, .brand-icon svg { color: #fff; width: 28px; height: 28px; }
 
         .brand-name {
-            font-family: 'DM Serif Display', serif;
+            font-family: 'DM Sans', sans-serif;
             font-size: 1.65rem;
-            color: var(--text-main);
+            font-weight: 700;
+            color: var(--primary);
             letter-spacing: .01em;
         }
 
@@ -449,7 +450,7 @@
     <!-- Brand -->
     <div class="brand-header">
         <div class="brand-icon">
-            <span class="iconify" data-icon="heroicons:sparkles" style="color:#fff; width:28px; height:28px;"></span>
+            <span class="iconify" data-icon="ph:plant" style="color:#fff; width:28px; height:28px;"></span>
         </div>
         <div class="brand-name">SiMonTani</div>
         <div class="brand-sub">Bergabunglah dengan ekosistem pertanian digital</div>
@@ -457,8 +458,8 @@
 
     <!-- Register Card -->
     <div class="auth-card" id="register-card">
-        <h2 class="auth-card-title">Buat akun baru</h2>
-        <p class="auth-card-subtitle">Pilih peran Anda — tidak bisa diubah setelah daftar</p>
+        <h2 class="auth-card-title">Buat akun SiMonTani</h2>
+        <p class="auth-card-subtitle">Gratis untuk petani, rice mill, dan packager.</p>
 
         {{-- Validation Error Summary --}}
         @if($errors->any())
@@ -471,69 +472,6 @@
         <form method="POST" action="{{ route('register') }}" id="register-form">
             @csrf
 
-            <!-- Role Selection -->
-            <div class="form-group">
-                <div class="role-section-label">Saya mendaftar sebagai</div>
-                <div class="role-options">
-                    <!-- Petani -->
-                    <div class="role-option">
-                        <input type="radio" name="role" id="role-petani" value="petani" required
-                               {{ old('role', 'petani') === 'petani' ? 'checked' : '' }}>
-                        <label for="role-petani" class="role-label">
-                            <div class="role-icon-box">
-                                <span class="iconify" data-icon="heroicons:hand-raised"></span>
-                            </div>
-                            <div class="role-info">
-                                <div class="role-name">Petani</div>
-                                <div class="role-desc">Kelola lahan, panen, & setoran gabah</div>
-                            </div>
-                            <div class="role-check">
-                                <span class="iconify" data-icon="heroicons:check"></span>
-                            </div>
-                        </label>
-                    </div>
-
-                    <!-- Rice Mill -->
-                    <div class="role-option">
-                        <input type="radio" name="role" id="role-ricemill" value="rice_mill" required
-                               {{ old('role') === 'rice_mill' ? 'checked' : '' }}>
-                        <label for="role-ricemill" class="role-label">
-                            <div class="role-icon-box">
-                                <span class="iconify" data-icon="heroicons:building-office-2"></span>
-                            </div>
-                            <div class="role-info">
-                                <div class="role-name">Rice Mill</div>
-                                <div class="role-desc">Penerimaan gabah, produksi & distribusi</div>
-                            </div>
-                            <div class="role-check">
-                                <span class="iconify" data-icon="heroicons:check"></span>
-                            </div>
-                        </label>
-                    </div>
-
-                    <!-- Packager -->
-                    <div class="role-option">
-                        <input type="radio" name="role" id="role-packager" value="packager" required
-                               {{ old('role') === 'packager' ? 'checked' : '' }}>
-                        <label for="role-packager" class="role-label">
-                            <div class="role-icon-box">
-                                <span class="iconify" data-icon="heroicons:archive-box"></span>
-                            </div>
-                            <div class="role-info">
-                                <div class="role-name">Packager</div>
-                                <div class="role-desc">Penerimaan beras, pengemasan & pesanan</div>
-                            </div>
-                            <div class="role-check">
-                                <span class="iconify" data-icon="heroicons:check"></span>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-                @error('role')
-                    <span class="error-text">{{ $message }}</span>
-                @enderror
-            </div>
-
             <!-- Nama -->
             <div class="form-group">
                 <label class="field-label" for="name-input">Nama lengkap</label>
@@ -545,7 +483,7 @@
                            value="{{ old('name') }}"
                            required
                            class="{{ $errors->has('name') ? 'is-invalid' : '' }}"
-                           placeholder="Nama lengkap Anda">
+                           placeholder="Contoh: Budi Santoso">
                 </div>
                 @error('name')
                     <span class="error-text">{{ $message }}</span>
@@ -563,9 +501,32 @@
                            value="{{ old('email') }}"
                            required
                            class="{{ $errors->has('email') ? 'is-invalid' : '' }}"
-                           placeholder="nama@email.com">
+                           placeholder="nama@simontani.id">
                 </div>
                 @error('email')
+                    <span class="error-text">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <!-- Role Selection (Dropdown) -->
+            <div class="form-group">
+                <label class="field-label" for="role-input">Peran</label>
+                <div class="input-wrapper">
+                    <span class="iconify input-icon" data-icon="heroicons:shield-check"></span>
+                    <select id="role-input"
+                            name="role"
+                            required
+                            class="{{ $errors->has('role') ? 'is-invalid' : '' }}"
+                            style="width: 100%; padding: 12px 14px 12px 44px; border: 1.5px solid var(--border); border-radius: 12px; font-size: .9rem; font-family: 'DM Sans', sans-serif; color: var(--text-main); background: #fff; appearance: none; outline: none; transition: border .2s, box-shadow .2s; cursor: pointer;">
+                        <option value="" disabled {{ old('role') ? '' : 'selected' }}>Pilih peran Anda</option>
+                        <option value="petani" {{ old('role') === 'petani' ? 'selected' : '' }}>Petani</option>
+                        <option value="rice_mill" {{ old('role') === 'rice_mill' ? 'selected' : '' }}>Rice Mill</option>
+                        <option value="packager" {{ old('role') === 'packager' ? 'selected' : '' }}>Packager</option>
+                    </select>
+                    <!-- Custom Dropdown Arrow -->
+                    <span class="iconify" data-icon="heroicons:chevron-down" style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--text-muted); pointer-events: none;"></span>
+                </div>
+                @error('role')
                     <span class="error-text">{{ $message }}</span>
                 @enderror
             </div>
@@ -585,10 +546,6 @@
                         <span class="iconify" data-icon="heroicons:eye"></span>
                     </button>
                 </div>
-                <div class="password-strength">
-                    <div class="bar" id="pw-bar"></div>
-                </div>
-                <div class="password-hint" id="pw-hint">Gunakan minimal 8 karakter</div>
                 @error('password')
                     <span class="error-text">{{ $message }}</span>
                 @enderror
@@ -596,7 +553,7 @@
 
             <!-- Password Confirmation -->
             <div class="form-group">
-                <label class="field-label" for="password-confirm-input">Konfirmasi Password</label>
+                <label class="field-label" for="password-confirm-input">Konfirmasi password</label>
                 <div class="input-wrapper">
                     <span class="iconify input-icon" data-icon="heroicons:lock-closed"></span>
                     <input id="password-confirm-input"
@@ -610,21 +567,28 @@
                 </div>
             </div>
 
+            <!-- Term and Privacy Checkbox -->
+            <div class="form-group" style="margin-top: 10px; margin-bottom: 24px;">
+                <label style="display: flex; align-items: flex-start; gap: 8px; font-size: .84rem; color: var(--text-muted); cursor: pointer; font-weight: 400;">
+                    <input type="checkbox" name="terms" required style="width: 16px; height: 16px; accent-color: var(--primary); margin-top: 2px;">
+                    <span style="line-height: 1.4;">Saya menyetujui <a href="#" style="color: var(--primary); font-weight: 600; text-decoration: none;">Syarat Layanan</a> dan <a href="#" style="color: var(--primary); font-weight: 600; text-decoration: none;">Kebijakan Privasi</a>.</span>
+                </label>
+            </div>
+
             <!-- Submit -->
             <button type="submit" class="btn-submit" id="register-btn">
-                <span class="iconify" data-icon="heroicons:user-plus"></span>
-                Daftar sekarang
+                Daftar Sekarang
             </button>
         </form>
 
         <!-- Divider -->
         <div class="auth-divider">
-            <span>atau</span>
+            <span style="text-transform: uppercase;">Atau</span>
         </div>
 
         <!-- Footer -->
         <div class="auth-footer">
-            Sudah punya akun? <a href="{{ route('login') }}">Masuk</a>
+            Sudah punya akun? <a href="{{ route('login') }}">Masuk di sini</a>
         </div>
     </div>
 </div>
@@ -642,33 +606,7 @@
         }
     }
 
-    // Password strength indicator
-    const pwInput = document.getElementById('password-input');
-    const pwBar   = document.getElementById('pw-bar');
-    const pwHint  = document.getElementById('pw-hint');
 
-    pwInput.addEventListener('input', function() {
-        const val = this.value;
-        let strength = 0;
-        if (val.length >= 8)            strength++;
-        if (/[A-Z]/.test(val))          strength++;
-        if (/[0-9]/.test(val))          strength++;
-        if (/[^A-Za-z0-9]/.test(val))   strength++;
-
-        const colors  = ['#dc3545', '#e8b84b', '#e8b84b', '#2d7a50', '#1a5c38'];
-        const widths  = ['0%', '25%', '50%', '75%', '100%'];
-        const hints   = [
-            'Gunakan minimal 8 karakter',
-            'Lemah — tambahkan huruf kapital',
-            'Sedang — tambahkan angka',
-            'Kuat — tambahkan simbol',
-            'Sangat kuat! 🎉'
-        ];
-
-        pwBar.style.width      = widths[strength];
-        pwBar.style.background = colors[strength];
-        pwHint.textContent     = hints[strength];
-    });
 </script>
 
 </body>
