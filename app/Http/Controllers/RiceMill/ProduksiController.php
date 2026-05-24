@@ -13,14 +13,31 @@ class ProduksiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $produksi = RiwayatProduksi::with('operasional')
-            ->where('user_id', Auth::id())
-            ->latest('tanggal_proses')
-            ->paginate(10);
+        $query = RiwayatProduksi::with('operasional')
+            ->where('user_id', Auth::id());
 
-        return view('ricemill.produksi.index', compact('produksi'));
+        if ($request->filled('bulan')) {
+            $query->whereMonth('tanggal_proses', $request->bulan);
+        }
+        if ($request->filled('tahun')) {
+            $query->whereYear('tanggal_proses', $request->tahun);
+        }
+
+        $produksi = $query->latest('tanggal_proses')->paginate(10)->withQueryString();
+
+        // Data perbandingan 6 bulan terakhir untuk chart
+        $perbandingan = RiwayatProduksi::where('user_id', Auth::id())
+            ->selectRaw('YEAR(tanggal_proses) as tahun, MONTH(tanggal_proses) as bulan, SUM(jumlah_beras) as total_beras, SUM(jumlah_gabah) as total_gabah')
+            ->where('tanggal_proses', '>=', now()->subMonths(5)->startOfMonth())
+            ->groupByRaw('YEAR(tanggal_proses), MONTH(tanggal_proses)')
+            ->orderByRaw('YEAR(tanggal_proses), MONTH(tanggal_proses)')
+            ->get();
+
+        $tahunList = range(now()->year - 2, now()->year);
+
+        return view('ricemill.produksi.index', compact('produksi', 'perbandingan', 'tahunList'));
     }
 
     public function create()
