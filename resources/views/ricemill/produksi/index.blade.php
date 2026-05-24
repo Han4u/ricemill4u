@@ -102,29 +102,57 @@
                 <tr>
                     <th>Tanggal</th>
                     <th>Batch</th>
+                    <th>Jenis Beras</th>
                     <th>Input Gabah</th>
                     <th>Output Beras</th>
                     <th>Rendemen</th>
-                    <th>Kualitas</th>
+                    <th>Status</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($produksi as $item)
-                <tr>
+                <tr class="{{ $item->notifikasi_rendemen_rendah ? 'table-danger-subtle' : '' }}">
                     <td>{{ \Carbon\Carbon::parse($item->tanggal_proses)->format('d M Y') }}</td>
                     <td class="fw-medium">{{ $item->batch_id }}</td>
+                    <td>
+                        @if($item->jenis_beras)
+                            @php
+                                $berasEmoji = match($item->jenis_beras) {
+                                    'premium'      => '⭐',
+                                    'medium'       => '🌾',
+                                    'setra_ramos'  => '🌿',
+                                    'pandan_wangi' => '🍃',
+                                    'biasa'        => '🫘',
+                                    default        => '🍚'
+                                };
+                            @endphp
+                            <span class="badge-custom badge-info-custom">{{ $berasEmoji }} {{ $item->jenis_beras_label }}</span>
+                        @else
+                            <span class="text-muted" style="font-size:.8rem;">—</span>
+                        @endif
+                    </td>
                     <td>{{ number_format($item->jumlah_gabah, 0, ',', '.') }} Kg</td>
                     <td class="fw-bold text-success">{{ number_format($item->jumlah_beras, 0, ',', '.') }} Kg</td>
                     <td>
-                        <span class="{{ $item->notifikasi_rendemen_rendah ? 'text-danger fw-bold' : '' }}">
+                        <span class="{{ $item->notifikasi_rendemen_rendah ? 'text-danger fw-bold' : 'text-success' }}">
                             {{ $item->rendemen }}%
                         </span>
                         @if($item->notifikasi_rendemen_rendah)
-                            <span class="iconify text-danger" data-icon="heroicons:exclamation-triangle" title="Rendemen Rendah"></span>
+                            <span class="iconify text-danger" data-icon="heroicons:exclamation-triangle"
+                                  title="Rendemen di bawah standar!"></span>
                         @endif
                     </td>
-                    <td><span class="badge-custom badge-info-custom">Standard</span></td>
+                    <td>
+                        @if($item->notifikasi_rendemen_rendah)
+                            <span class="badge-custom badge-danger-custom">
+                                <span class="iconify" data-icon="heroicons:exclamation-circle" style="width:12px;"></span>
+                                Di Bawah Standar
+                            </span>
+                        @else
+                            <span class="badge-custom badge-success-custom">Normal</span>
+                        @endif
+                    </td>
                     <td>
                         <form action="{{ route('ricemill.produksi.destroy', $item) }}" method="POST" onsubmit="return confirm('Hapus data ini?')">
                             @csrf @method('DELETE')
@@ -134,6 +162,17 @@
                         </form>
                     </td>
                 </tr>
+                @if($item->notifikasi_rendemen_rendah)
+                <tr>
+                    <td colspan="8" style="padding:6px 16px 10px;background:#fef2f2;border-bottom:2px solid #fca5a5;">
+                        <span class="iconify" data-icon="heroicons:exclamation-triangle" style="color:#dc2626;width:15px;"></span>
+                        <strong style="color:#dc2626;font-size:.82rem;">Peringatan Rendemen Rendah</strong>
+                        <span style="color:#7f1d1d;font-size:.82rem;">
+                            — Rendemen {{ $item->rendemen }}% di bawah standar 60%. Periksa kondisi mesin dan kualitas gabah batch <strong>{{ $item->batch_id }}</strong>.
+                        </span>
+                    </td>
+                </tr>
+                @endif
                 @empty
                 <tr>
                     <td colspan="7" class="text-center py-5 text-muted">

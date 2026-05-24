@@ -55,6 +55,7 @@ class ProduksiController extends Controller
             'operasional_id' => 'required|exists:operasional_penggilingan,id',
             'tanggal_proses' => 'required|date',
             'jumlah_beras'   => 'required|numeric|min:0.01',
+            'jenis_beras'    => 'required|in:premium,medium,setra_ramos,pandan_wangi,biasa',
             'catatan'        => 'nullable|string',
         ]);
 
@@ -76,8 +77,13 @@ class ProduksiController extends Controller
             $operasional->penerimaanGabah->update(['status' => 'selesai']);
         }
 
+        $redirectMsg = 'Hasil produksi berhasil dicatat!';
+        if ($rendemen < 60) {
+            $redirectMsg = "⚠️ Hasil produksi dicatat, namun rendemen hanya {$rendemen}% — di bawah standar (60%)!";
+        }
+
         return redirect()->route('ricemill.produksi.index')
-            ->with('success', 'Hasil produksi berhasil dicatat!');
+            ->with($rendemen < 60 ? 'warning' : 'success', $redirectMsg);
     }
 
     public function destroy(RiwayatProduksi $produksi)
