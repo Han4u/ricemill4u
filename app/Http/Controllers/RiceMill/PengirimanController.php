@@ -31,12 +31,12 @@ class PengirimanController extends Controller
     {
         $validated = $request->validate([
             'nama_packager'    => 'required|string|max:255',
-            'jenis_beras'      => 'required|in:premium,medium,setra_ramos,pandan_wangi',
+            'jenis_beras'      => 'required|in:premium,medium,setra_ramos,pandan_wangi,biasa',
             'jumlah_karung'    => 'required|integer|min:1',
             'berat_per_karung' => 'required|numeric|min:1',
             'tanggal_kirim'    => 'required|date',
             'biaya_logistik'   => 'nullable|numeric|min:0',
-            'status'           => 'required|in:menunggu,dikirim,diterima,ditolak',
+            'status'           => 'required|in:menunggu,dikirim,diterima,ditolak,diproses',
             'bukti_kirim'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'catatan'          => 'nullable|string',
         ]);
@@ -65,12 +65,12 @@ class PengirimanController extends Controller
 
         $validated = $request->validate([
             'nama_packager'    => 'required|string|max:255',
-            'jenis_beras'      => 'required|in:premium,medium,setra_ramos,pandan_wangi',
+            'jenis_beras'      => 'required|in:premium,medium,setra_ramos,pandan_wangi,biasa',
             'jumlah_karung'    => 'required|integer|min:1',
             'berat_per_karung' => 'required|numeric|min:1',
             'tanggal_kirim'    => 'required|date',
             'biaya_logistik'   => 'nullable|numeric|min:0',
-            'status'           => 'required|in:menunggu,dikirim,diterima,ditolak',
+            'status'           => 'required|in:menunggu,dikirim,diterima,ditolak,diproses',
             'bukti_kirim'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'catatan'          => 'nullable|string',
         ]);

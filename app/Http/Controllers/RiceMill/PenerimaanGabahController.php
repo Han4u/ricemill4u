@@ -57,15 +57,21 @@ class PenerimaanGabahController extends Controller
             ->with('success', 'Data penerimaan gabah berhasil dicatat!');
     }
 
-    public function edit(PenerimaanGabah $penerimaan)
+    /**
+     * BUG FIX: Nama parameter diubah dari $penerimaan → $penerimaanGabah
+     * agar cocok dengan route parameter {penerimaan_gabah} (Laravel snake_case ke camelCase).
+     * Sebelumnya: edit(PenerimaanGabah $penerimaan) → model binding GAGAL → $penerimaan kosong
+     *             → user_id null !== Auth::id() → 403 Forbidden
+     */
+    public function edit(PenerimaanGabah $penerimaanGabah)
     {
-        abort_if($penerimaan->user_id !== Auth::id(), 403);
-        return view('ricemill.penerimaan-gabah.edit', compact('penerimaan'));
+        abort_if($penerimaanGabah->user_id !== Auth::id(), 403);
+        return view('ricemill.penerimaan-gabah.edit', ['penerimaan' => $penerimaanGabah]);
     }
 
-    public function update(Request $request, PenerimaanGabah $penerimaan)
+    public function update(Request $request, PenerimaanGabah $penerimaanGabah)
     {
-        abort_if($penerimaan->user_id !== Auth::id(), 403);
+        abort_if($penerimaanGabah->user_id !== Auth::id(), 403);
 
         $validated = $request->validate([
             'nama_petani'    => 'required|string|max:255',
@@ -79,27 +85,27 @@ class PenerimaanGabahController extends Controller
         ]);
 
         if ($request->hasFile('bukti_foto')) {
-            if ($penerimaan->bukti_foto) {
-                Storage::disk('public')->delete($penerimaan->bukti_foto);
+            if ($penerimaanGabah->bukti_foto) {
+                Storage::disk('public')->delete($penerimaanGabah->bukti_foto);
             }
             $validated['bukti_foto'] = $request->file('bukti_foto')->store('penerimaan', 'public');
         }
 
-        $penerimaan->update($validated);
+        $penerimaanGabah->update($validated);
 
         return redirect()->route('ricemill.penerimaan-gabah.index')
             ->with('success', 'Data penerimaan berhasil diperbarui!');
     }
 
-    public function destroy(PenerimaanGabah $penerimaan)
+    public function destroy(PenerimaanGabah $penerimaanGabah)
     {
-        abort_if($penerimaan->user_id !== Auth::id(), 403);
+        abort_if($penerimaanGabah->user_id !== Auth::id(), 403);
 
-        if ($penerimaan->bukti_foto) {
-            Storage::disk('public')->delete($penerimaan->bukti_foto);
+        if ($penerimaanGabah->bukti_foto) {
+            Storage::disk('public')->delete($penerimaanGabah->bukti_foto);
         }
 
-        $penerimaan->delete();
+        $penerimaanGabah->delete();
 
         return redirect()->route('ricemill.penerimaan-gabah.index')
             ->with('success', 'Data penerimaan berhasil dihapus!');

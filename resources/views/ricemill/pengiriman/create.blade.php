@@ -33,6 +33,7 @@
                                 <option value="medium">Medium</option>
                                 <option value="setra_ramos">Setra Ramos</option>
                                 <option value="pandan_wangi">Pandan Wangi</option>
+                                <option value="biasa">Biasa</option>
                             </select>
                         </div>
                         <div class="col-md-6">
@@ -60,10 +61,11 @@
                                 <option value="dikirim" selected>Dikirim</option>
                                 <option value="diterima">Diterima</option>
                                 <option value="ditolak">Ditolak</option>
+                                <option value="diproses">Diproses</option>
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label-custom">Bukti Kirim (Surat Jalan/Foto)</label>
+                            <label class="form-label-custom">Bukti Kirim (Surat Jalan/Foto) <span class="text-muted" style="font-size:.78rem;">(Opsional)</span></label>
                             <input type="file" class="form-control-custom" name="bukti_kirim" accept="image/*">
                         </div>
                     </div>

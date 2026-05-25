@@ -16,15 +16,25 @@
                     @csrf
                     <div class="mb-3">
                         <label class="form-label-custom">Pilih Operasional (Batch)</label>
+                        @if($operasional->isEmpty())
+                            <div class="alert-clean mb-2" style="background:#fef9c3;border-color:#fde047;color:#854d0e;">
+                                <span class="iconify" data-icon="heroicons:exclamation-triangle" style="width:18px;color:#ca8a04;"></span>
+                                <span>Tidak ada batch tersedia. Pastikan Anda sudah membuat <strong>Operasional Penggilingan</strong> terlebih dahulu, dan batch tersebut belum memiliki data produksi.</span>
+                            </div>
+                        @endif
                         <select class="form-select-custom" name="operasional_id" required>
                             <option value="">Pilih batch yang sedang diproses...</option>
                             @foreach($operasional as $item)
-                                <option value="{{ $item->id }}">
-                                    {{ $item->batch_id }} - {{ $item->penerimaanGabah->nama_petani }} (Gabah: {{ $item->jumlah_gabah_masuk }} Kg)
+                                <option value="{{ $item->id }}"
+                                        data-gabah="{{ $item->jumlah_gabah_masuk }}">
+                                    {{ $item->batch_id }}
+                                    — {{ $item->penerimaanGabah->nama_petani ?? 'Tanpa Petani' }}
+                                    ({{ number_format($item->jumlah_gabah_masuk, 0, ',', '.') }} Kg)
+                                    [{{ ucfirst($item->status) }}]
                                 </option>
                             @endforeach
                         </select>
-                        <small class="text-muted">Hanya menampilkan operasional yang belum selesai.</small>
+                        <small class="text-muted">Hanya menampilkan batch yang belum memiliki data produksi.</small>
                     </div>
 
                     <div class="row mb-3">
@@ -93,24 +103,17 @@
 
 @push('scripts')
 <script>
-    // Data gabah per operasional (ambil dari PHP ke JS)
-    const gabahData = {
-        @foreach($operasional as $item)
-            {{ $item->id }}: {{ $item->jumlah_gabah_masuk }},
-        @endforeach
-    };
-
-    const selectOp  = document.querySelector('[name="operasional_id"]');
+    const selectOp   = document.querySelector('[name="operasional_id"]');
     const inputBeras = document.getElementById('jumlah_beras');
     const previewBox = document.getElementById('rendemen-preview');
     const previewVal = document.getElementById('rendemen-value');
 
     function hitungRendemen() {
-        const opId   = selectOp.value;
+        const selectedOption = selectOp.options[selectOp.selectedIndex];
+        const gabah  = parseFloat(selectedOption?.getAttribute('data-gabah') || 0);
         const beras  = parseFloat(inputBeras.value);
-        const gabah  = gabahData[opId];
 
-        if (!opId || !gabah || !beras || beras <= 0) {
+        if (!selectOp.value || !gabah || !beras || beras <= 0) {
             previewVal.textContent = 'Pilih batch & masukkan jumlah beras...';
             previewBox.style.background = '#f0fdf4';
             previewBox.style.borderColor = '#b2dcc4';

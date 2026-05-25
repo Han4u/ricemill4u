@@ -42,8 +42,17 @@ class ProduksiController extends Controller
 
     public function create()
     {
-        $operasional = OperasionalPenggilingan::where('user_id', Auth::id())
-            ->where('status', '!=', 'selesai')
+        // Tampilkan semua operasional milik user yang statusnya belum 'selesai'
+        // ATAU yang statusnya 'selesai' tapi belum ada riwayat produksinya
+        // (handle kasus di mana status operasional tidak di-update dengan benar)
+        $operasional = OperasionalPenggilingan::with('penerimaanGabah')
+            ->where('user_id', Auth::id())
+            ->whereNotIn('id', function ($q) {
+                $q->select('operasional_id')
+                  ->from('riwayat_produksi')
+                  ->whereNotNull('operasional_id');
+            })
+            ->latest('tanggal_proses')
             ->get();
 
         return view('ricemill.produksi.create', compact('operasional'));
