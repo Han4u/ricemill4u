@@ -31,8 +31,16 @@
                             <select class="form-select-custom" name="jenis_produk" required>
                                 <option value="Beras Premium 5kg">Beras Premium 5kg</option>
                                 <option value="Beras Premium 10kg">Beras Premium 10kg</option>
+                                <option value="Beras Premium 25kg">Beras Premium 25kg</option>
+                                <option value="Beras Medium 5kg">Beras Medium 5kg</option>
+                                <option value="Beras Medium 10kg">Beras Medium 10kg</option>
                                 <option value="Beras Medium 25kg">Beras Medium 25kg</option>
+                                <option value="Beras Biasa 5kg">Beras Biasa 5kg</option>
+                                <option value="Beras Biasa 10kg">Beras Biasa 10kg</option>
+                                <option value="Beras Biasa 25kg">Beras Biasa 25kg</option>
                                 <option value="Beras Setra Ramos 5kg">Beras Setra Ramos 5kg</option>
+                                <option value="Beras Setra Ramos 10kg">Beras Setra Ramos 10kg</option>
+                                <option value="Beras Pandan Wangi 5kg">Beras Pandan Wangi 5kg</option>
                             </select>
                         </div>
                         <div class="col-md-6">
@@ -42,6 +50,7 @@
                                 <option value="diproses">Diproses</option>
                                 <option value="dikirim">Dikirim</option>
                                 <option value="selesai">Selesai</option>
+                                <option value="dibatalkan">Dibatalkan</option>
                             </select>
                         </div>
                     </div>

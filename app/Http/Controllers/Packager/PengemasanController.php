@@ -62,7 +62,7 @@ class PengemasanController extends Controller
         $validated = $request->validate([
             'penerimaan_beras_id' => 'required|exists:penerimaan_beras,id',
             'tanggal'             => 'required|date',
-            'jenis_beras'         => 'required|string|max:100',
+            'jenis_beras'         => 'required|in:premium,medium,setra_ramos,pandan_wangi,biasa',
             'jenis_kemasan'       => 'required|in:5kg,10kg,25kg,50kg',
             'jumlah_kemasan'      => 'required|integer|min:1',
             'kualitas'            => 'required|in:layak_jual,reject',

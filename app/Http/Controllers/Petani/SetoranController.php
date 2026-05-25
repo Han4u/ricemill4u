@@ -37,7 +37,7 @@ class SetoranController extends Controller
             'hasil_bersih'       => 'nullable|numeric|min:0',
             'total_pendapatan'   => 'nullable|numeric|min:0',
             'catatan'            => 'nullable|string',
-            'bukti_nota'         => 'nullable|image|mimes:jpg,jpeg,png,pdf|max:2048',
+            'bukti_nota'         => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $validated['user_id'] = Auth::id();
@@ -62,6 +62,7 @@ class SetoranController extends Controller
     {
         abort_if($setoran->user_id !== Auth::id(), 403);
 
+        // BUG FIX: 'status' ditambahkan ke validasi agar perubahan status tersimpan
         $validated = $request->validate([
             'tanggal_setoran'    => 'required|date',
             'jenis_hasil_panen'  => 'required|string|max:100',
@@ -69,8 +70,9 @@ class SetoranController extends Controller
             'biaya_penggilingan' => 'nullable|numeric|min:0',
             'hasil_bersih'       => 'nullable|numeric|min:0',
             'total_pendapatan'   => 'nullable|numeric|min:0',
+            'status'             => 'required|in:pending,diproses,selesai',
             'catatan'            => 'nullable|string',
-            'bukti_nota'         => 'nullable|image|mimes:jpg,jpeg,png,pdf|max:2048',
+            'bukti_nota'         => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         if ($request->hasFile('bukti_nota')) {

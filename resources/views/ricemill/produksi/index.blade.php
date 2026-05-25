@@ -197,9 +197,11 @@
 <script>
     const namaBulan = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
 
-    const labels = @json($perbandingan->map(fn($r) => namaBulan[$r->bulan - 1] . ' ' . $r->tahun));
-    const dataBeras  = @json($perbandingan->pluck('total_beras'));
-    const dataGabah  = @json($perbandingan->pluck('total_gabah'));
+    // Fix: proses di JS murni, bukan di dalam PHP closure
+    const perbandinganRaw = @json($perbandingan);
+    const labels    = perbandinganRaw.map(r => namaBulan[r.bulan - 1] + ' ' + r.tahun);
+    const dataBeras = perbandinganRaw.map(r => parseFloat(r.total_beras));
+    const dataGabah = perbandinganRaw.map(r => parseFloat(r.total_gabah));
 
     const ctx = document.getElementById('chartProduksi').getContext('2d');
     new Chart(ctx, {

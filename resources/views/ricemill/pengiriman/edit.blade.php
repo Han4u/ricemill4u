@@ -30,10 +30,11 @@
                         <div class="col-md-6">
                             <label class="form-label-custom">Jenis Beras</label>
                             <select class="form-select-custom" name="jenis_beras" required>
-                                <option value="premium"     {{ $pengiriman->jenis_beras == 'premium' ? 'selected' : '' }}>Premium</option>
-                                <option value="medium"      {{ $pengiriman->jenis_beras == 'medium' ? 'selected' : '' }}>Medium</option>
-                                <option value="setra_ramos" {{ $pengiriman->jenis_beras == 'setra_ramos' ? 'selected' : '' }}>Setra Ramos</option>
+                                <option value="premium"      {{ $pengiriman->jenis_beras == 'premium' ? 'selected' : '' }}>Premium</option>
+                                <option value="medium"       {{ $pengiriman->jenis_beras == 'medium' ? 'selected' : '' }}>Medium</option>
+                                <option value="setra_ramos"  {{ $pengiriman->jenis_beras == 'setra_ramos' ? 'selected' : '' }}>Setra Ramos</option>
                                 <option value="pandan_wangi" {{ $pengiriman->jenis_beras == 'pandan_wangi' ? 'selected' : '' }}>Pandan Wangi</option>
+                                <option value="biasa"         {{ $pengiriman->jenis_beras == 'biasa' ? 'selected' : '' }}>Biasa</option>
                             </select>
                         </div>
                         <div class="col-md-6">
@@ -61,6 +62,7 @@
                                 <option value="dikirim"  {{ $pengiriman->status == 'dikirim' ? 'selected' : '' }}>Dikirim</option>
                                 <option value="diterima" {{ $pengiriman->status == 'diterima' ? 'selected' : '' }}>Diterima</option>
                                 <option value="ditolak"  {{ $pengiriman->status == 'ditolak' ? 'selected' : '' }}>Ditolak</option>
+                                <option value="diproses" {{ $pengiriman->status == 'diproses' ? 'selected' : '' }}>Diproses</option>
                             </select>
                         </div>
                         <div class="col-md-6">
