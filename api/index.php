@@ -14,7 +14,10 @@ if (isset($_ENV['VERCEL']) && env('DB_CONNECTION', 'sqlite') === 'sqlite') {
         try {
             $pdo = new PDO("sqlite:$dbPath");
             $result = $pdo->query("SELECT name FROM sqlite_master WHERE type='table' AND name='users'");
-            if (!$result || !$result->fetch()) {
+            $hasUsersTable = $result && $result->fetch();
+            $pdo = null; // Close the connection to release file lock
+
+            if (!$hasUsersTable) {
                 // Resolve console kernel to run migrations
                 $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
                 $kernel->call('migrate', ['--force' => true]);
