@@ -29,6 +29,8 @@
     }
   ],
   "env": {
+    "APP_KEY": "base64:F/AIJaYjlkUHyn/983al44Mc4vu65fJn3owwb+zLMac=",
+    "APP_DEBUG": "true",
     "APP_CONFIG_CACHE": "/tmp/config.php",
     "APP_EVENTS_CACHE": "/tmp/events.php",
     "APP_PACKAGES_CACHE": "/tmp/packages.php",
