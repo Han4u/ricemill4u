@@ -1,0 +1,91 @@
+@extends('layouts.ricemill')
+
+@section('title', 'Laporan Keuangan')
+@section('page-title', 'Laporan Keuangan')
+@section('breadcrumb', 'Dashboard / Keuangan')
+
+@section('topbar-actions')
+<a href="{{ route('ricemill.keuangan.create') }}" class="btn-primary-custom">
+    <span class="iconify" data-icon="heroicons:plus-circle"></span> Catat Transaksi
+</a>
+@endsection
+
+@section('content')
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="stat-icon" style="background: rgba(22, 163, 74, 0.1); color: #16a34a;">
+                <span class="iconify" data-icon="heroicons:arrow-down-circle"></span>
+            </div>
+            <div class="stat-value">Rp {{ number_format($totalPemasukan, 0, ',', '.') }}</div>
+            <div class="stat-label">Total Pemasukan</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="stat-icon" style="background: rgba(220, 38, 38, 0.1); color: #dc2626;">
+                <span class="iconify" data-icon="heroicons:arrow-up-circle"></span>
+            </div>
+            <div class="stat-value">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</div>
+            <div class="stat-label">Total Pengeluaran</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="stat-icon" style="background: rgba(13, 148, 136, 0.1); color: #0d9488;">
+                <span class="iconify" data-icon="heroicons:wallet"></span>
+            </div>
+            <div class="stat-value">Rp {{ number_format($totalPemasukan - $totalPengeluaran, 0, ',', '.') }}</div>
+            <div class="stat-label">Saldo Kas</div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header-clean">
+        <h5>Mutasi Kas Rice Mill</h5>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-clean mb-0">
+            <thead>
+                <tr>
+                    <th>Tanggal</th>
+                    <th>Keterangan</th>
+                    <th>Kategori</th>
+                    <th>Tipe</th>
+                    <th>Jumlah</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($keuangan as $item)
+                <tr>
+                    <td>{{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}</td>
+                    <td class="fw-medium">{{ $item->keterangan }}</td>
+                    <td>{{ $item->kategori ?? 'Operasional' }}</td>
+                    <td>
+                        <span class="text-{{ $item->tipe == 'pemasukan' ? 'success' : 'danger' }} fw-bold">
+                            {{ ucfirst($item->tipe) }}
+                        </span>
+                    </td>
+                    <td class="fw-bold">Rp {{ number_format($item->jumlah, 0, ',', '.') }}</td>
+                    <td><span class="badge-custom badge-success-custom">Valid</span></td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="6" class="text-center py-5 text-muted">
+                        <span class="iconify" data-icon="heroicons:presentation-chart-bar" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></span>
+                        <p>Belum ada data transaksi keuangan.</p>
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+    @if($keuangan->hasPages())
+    <div class="card-footer bg-white border-top-0 py-3">
+        {{ $keuangan->links() }}
+    </div>
+    @endif
+</div>
+@endsection
