@@ -37,7 +37,10 @@ if (isset($_ENV['VERCEL'])) {
                 touch($dbPath);
             }
         }
-        config(['database.connections.sqlite.database' => $dbPath]);
+        // Instead of calling config(), set environment variables directly
+        putenv("DB_DATABASE={$dbPath}");
+        $_ENV['DB_DATABASE'] = $dbPath;
+        $_SERVER['DB_DATABASE'] = $dbPath;
     }
 }
 
