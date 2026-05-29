@@ -7,6 +7,7 @@ use App\Models\RiwayatProduksi;
 use App\Models\OperasionalPenggilingan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProduksiController extends Controller
 {
@@ -46,14 +47,29 @@ class ProduksiController extends Controller
         }
 
         // Data perbandingan 6 bulan terakhir dari targetDate untuk chart
+        $driver = DB::getDriverName();
+        if ($driver === 'pgsql') {
+            $selectRaw = 'EXTRACT(YEAR FROM tanggal_proses) as tahun, EXTRACT(MONTH FROM tanggal_proses) as bulan, SUM(jumlah_beras) as total_beras, SUM(jumlah_gabah) as total_gabah';
+            $groupByRaw = 'EXTRACT(YEAR FROM tanggal_proses), EXTRACT(MONTH FROM tanggal_proses)';
+            $orderByRaw = 'EXTRACT(YEAR FROM tanggal_proses), EXTRACT(MONTH FROM tanggal_proses)';
+        } elseif ($driver === 'sqlite') {
+            $selectRaw = "CAST(strftime('%Y', tanggal_proses) AS INTEGER) as tahun, CAST(strftime('%m', tanggal_proses) AS INTEGER) as bulan, SUM(jumlah_beras) as total_beras, SUM(jumlah_gabah) as total_gabah";
+            $groupByRaw = "strftime('%Y', tanggal_proses), strftime('%m', tanggal_proses)";
+            $orderByRaw = "strftime('%Y', tanggal_proses), strftime('%m', tanggal_proses)";
+        } else {
+            $selectRaw = 'YEAR(tanggal_proses) as tahun, MONTH(tanggal_proses) as bulan, SUM(jumlah_beras) as total_beras, SUM(jumlah_gabah) as total_gabah';
+            $groupByRaw = 'YEAR(tanggal_proses), MONTH(tanggal_proses)';
+            $orderByRaw = 'YEAR(tanggal_proses), MONTH(tanggal_proses)';
+        }
+
         $perbandingan = RiwayatProduksi::where('user_id', Auth::id())
-            ->selectRaw('YEAR(tanggal_proses) as tahun, MONTH(tanggal_proses) as bulan, SUM(jumlah_beras) as total_beras, SUM(jumlah_gabah) as total_gabah')
+            ->selectRaw($selectRaw)
             ->whereBetween('tanggal_proses', [
                 $targetDate->copy()->subMonths(5)->startOfMonth()->toDateString(),
                 $targetDate->copy()->endOfMonth()->toDateString()
             ])
-            ->groupByRaw('YEAR(tanggal_proses), MONTH(tanggal_proses)')
-            ->orderByRaw('YEAR(tanggal_proses), MONTH(tanggal_proses)')
+            ->groupByRaw($groupByRaw)
+            ->orderByRaw($orderByRaw)
             ->get();
 
         $tahunList = range(now()->year - 2, now()->year);
