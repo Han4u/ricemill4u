@@ -52,8 +52,8 @@
                             @if($penerimaan->bukti_foto)
                                 <div class="mt-2">
                                     <span class="text-muted d-block mb-1" style="font-size:0.8rem;">Bukti Terima Saat Ini:</span>
-                                    <a href="{{ route('packager.penerimaan-beras.bukti', $penerimaan) }}" target="_blank">
-                                        <img src="{{ route('packager.penerimaan-beras.bukti', $penerimaan) }}" alt="Bukti Terima" class="img-thumbnail" style="max-height:100px; object-fit:cover;">
+                                    <a href="{{ route('packager.penerimaan-beras.bukti', $penerimaan) }}?t={{ $penerimaan->updated_at->timestamp }}" target="_blank">
+                                        <img src="{{ route('packager.penerimaan-beras.bukti', $penerimaan) }}?t={{ $penerimaan->updated_at->timestamp }}" alt="Bukti Terima" class="img-thumbnail" style="max-height:100px; object-fit:cover;">
                                     </a>
                                 </div>
                             @endif

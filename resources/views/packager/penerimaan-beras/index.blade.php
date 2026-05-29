@@ -44,7 +44,7 @@
                     </td>
                     <td>
                         @if($item->bukti_foto)
-                            <a href="{{ route('packager.penerimaan-beras.bukti', $item) }}" target="_blank" class="btn-outline-custom btn-sm d-inline-flex align-items-center gap-1" style="font-size:0.75rem; padding: 4px 8px;">
+                            <a href="{{ route('packager.penerimaan-beras.bukti', $item) }}?t={{ $item->updated_at->timestamp }}" target="_blank" class="btn-outline-custom btn-sm d-inline-flex align-items-center gap-1" style="font-size:0.75rem; padding: 4px 8px;">
                                 <span class="iconify" data-icon="heroicons:photo" style="width:14px;height:14px;"></span> Lihat
                             </a>
                         @else
