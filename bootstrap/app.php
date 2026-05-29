@@ -23,15 +23,16 @@ $app = Application::configure(basePath: dirname(__DIR__))
 if (isset($_ENV['VERCEL'])) {
     $app->useStoragePath('/tmp');
 
-    // Automatically detect Vercel Postgres database if available
-    if (env('POSTGRES_URL')) {
+    // Automatically detect Vercel Postgres database if available (prefer non-pooling/unpooled for migrations)
+    $postgresUrl = env('POSTGRES_URL_NON_POOLING') ?: env('DATABASE_URL_UNPOOLED') ?: env('POSTGRES_URL') ?: env('DATABASE_URL');
+    if ($postgresUrl) {
         putenv("DB_CONNECTION=pgsql");
         $_ENV['DB_CONNECTION'] = 'pgsql';
         $_SERVER['DB_CONNECTION'] = 'pgsql';
 
-        putenv("DB_URL=" . env('POSTGRES_URL'));
-        $_ENV['DB_URL'] = env('POSTGRES_URL');
-        $_SERVER['DB_URL'] = env('POSTGRES_URL');
+        putenv("DB_URL={$postgresUrl}");
+        $_ENV['DB_URL'] = $postgresUrl;
+        $_SERVER['DB_URL'] = $postgresUrl;
     }
     // SQLite writable workaround
     elseif (env('DB_CONNECTION', 'sqlite') === 'sqlite') {
