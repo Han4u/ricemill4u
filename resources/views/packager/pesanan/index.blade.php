@@ -105,11 +105,11 @@
                                            @elseif($item->status == 'dikirim')
                                                background-color: rgba(147, 51, 234, 0.1); color: #9333ea;
                                            @endif">
-                                <option value="menunggu" {{ $item->status == 'menunggu' ? 'selected' : '' }}>Menunggu</option>
-                                <option value="diproses" {{ $item->status == 'diproses' ? 'selected' : '' }}>Diproses</option>
-                                <option value="dikirim" {{ $item->status == 'dikirim' ? 'selected' : '' }}>Dikirim</option>
-                                <option value="selesai" {{ $item->status == 'selesai' ? 'selected' : '' }}>Selesai</option>
-                                <option value="dibatalkan" {{ $item->status == 'dibatalkan' ? 'selected' : '' }}>Dibatalkan</option>
+                                <option value="menunggu" class="text-warning" style="background-color: #fffbeb; color: #b45309; font-weight: 600;" {{ $item->status == 'menunggu' ? 'selected' : '' }}>Menunggu</option>
+                                <option value="diproses" class="text-primary" style="background-color: #eff6ff; color: #1d4ed8; font-weight: 600;" {{ $item->status == 'diproses' ? 'selected' : '' }}>Diproses</option>
+                                <option value="dikirim" class="text-info" style="background-color: #faf5ff; color: #6d28d9; font-weight: 600;" {{ $item->status == 'dikirim' ? 'selected' : '' }}>Dikirim</option>
+                                <option value="selesai" class="text-success" style="background-color: #f0fdf4; color: #15803d; font-weight: 600;" {{ $item->status == 'selesai' ? 'selected' : '' }}>Selesai</option>
+                                <option value="dibatalkan" class="text-danger" style="background-color: #fef2f2; color: #b91c1c; font-weight: 600;" {{ $item->status == 'dibatalkan' ? 'selected' : '' }}>Dibatalkan</option>
                             </select>
                         </form>
                     </td>
