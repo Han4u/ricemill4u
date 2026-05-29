@@ -216,20 +216,3 @@ Route::get('/storage/{path}', function ($path) {
     }
     abort(404);
 })->where('path', '.*');
-
-// Temporary test route to mock image upload in production
-Route::get('/test-upload-mock', function () {
-    try {
-        $disk = \Illuminate\Support\Facades\Storage::disk('public');
-        $disk->put('pengiriman/test_image.png', base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='));
-        
-        $pengiriman = \App\Models\PengirimanBeras::find(4);
-        if ($pengiriman) {
-            $pengiriman->update(['bukti_kirim' => 'pengiriman/test_image.png']);
-            return "Mock upload successful! Updated shipment ID 4.";
-        }
-        return "Shipment ID 4 not found.";
-    } catch (\Exception $e) {
-        return "Error: " . $e->getMessage();
-    }
-});
