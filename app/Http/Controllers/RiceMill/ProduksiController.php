@@ -113,7 +113,7 @@ class ProduksiController extends Controller
 
         // Cek rendemen rendah (misal di bawah 60%)
         $rendemen = ($request->jumlah_beras / $operasional->jumlah_gabah_masuk) * 100;
-        $validated['notifikasi_rendemen_rendah'] = $rendemen < 60;
+        $validated['notifikasi_rendemen_rendah'] = DB::raw($rendemen < 60 ? 'true' : 'false');
 
         RiwayatProduksi::create($validated);
 
