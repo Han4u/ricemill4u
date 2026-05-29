@@ -23,8 +23,9 @@
                     <th>No. Surat Jalan</th>
                     <th>Tujuan</th>
                     <th>Jumlah (Kg)</th>
-                    <th>Kendaraan</th>
+                    <th>Jenis Beras</th>
                     <th>Status</th>
+                    <th>Bukti</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -48,6 +49,15 @@
                         @endif
                     </td>
                     <td>
+                        @if($item->bukti_kirim)
+                            <a href="{{ asset('storage/' . $item->bukti_kirim) }}" target="_blank" class="btn-outline-custom btn-sm d-inline-flex align-items-center gap-1" style="font-size:0.75rem; padding: 4px 8px;">
+                                <span class="iconify" data-icon="heroicons:photo" style="width:14px;height:14px;"></span> Lihat
+                            </a>
+                        @else
+                            <span class="text-muted" style="font-size:0.75rem;">-</span>
+                        @endif
+                    </td>
+                    <td>
                         <div class="d-flex gap-2">
                             <a href="{{ route('ricemill.pengiriman.edit', $item) }}" class="btn-outline-custom btn-sm"
                                title="Edit">
@@ -66,7 +76,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="text-center py-5 text-muted">
+                    <td colspan="8" class="text-center py-5 text-muted">
                         <span class="iconify" data-icon="heroicons:truck" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></span>
                         <p>Belum ada data pengiriman.</p>
                     </td>

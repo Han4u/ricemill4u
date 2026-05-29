@@ -201,3 +201,18 @@ Route::middleware(['auth', 'role:packager'])->prefix('packager')->name('packager
     Route::resource('pengemasan',      PengemasanController::class)->except(['edit', 'update']);
     Route::resource('pesanan',         PesananController::class);
 });
+
+// Route to serve uploaded files dynamically from /tmp/app/public (critical for Vercel serverless environment)
+Route::get('/storage/{path}', function ($path) {
+    $path = str_replace(['../', '..\\'], '', $path);
+    $disk = \Illuminate\Support\Facades\Storage::disk('public');
+    if ($disk->exists($path)) {
+        $filePath = $disk->path($path);
+        $mimeType = $disk->mimeType($path) ?: 'application/octet-stream';
+        return response()->file($filePath, [
+            'Content-Type' => $mimeType,
+            'Cache-Control' => 'public, max-age=86400',
+        ]);
+    }
+    abort(404);
+})->where('path', '.*');
