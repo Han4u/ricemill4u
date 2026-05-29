@@ -199,7 +199,9 @@ Route::middleware(['auth', 'role:packager'])->prefix('packager')->name('packager
     Route::get('/dashboard', [PackagerDashboard::class, 'index'])->name('dashboard');
 
     Route::get('penerimaan-beras/{id}/bukti', [PenerimaanBerasController::class, 'showBukti'])->name('penerimaan-beras.bukti');
-    Route::resource('penerimaan-beras', PenerimaanBerasController::class)->parameters(['penerimaan-beras' => 'penerimaan']);
+    Route::resource('penerimaan-beras', PenerimaanBerasController::class)->parameters([
+        'penerimaan-beras' => 'penerimaan'
+    ]);
     Route::resource('pengemasan',      PengemasanController::class)->except(['edit', 'update']);
     Route::resource('pesanan',         PesananController::class);
 });

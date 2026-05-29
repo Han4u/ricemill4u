@@ -23,7 +23,7 @@
                     <th>No. Surat Jalan</th>
                     <th>Pengirim</th>
                     <th>Jumlah (Kg)</th>
-                    <th>Kualitas</th>
+                    <th>Jenis Beras</th>
                     <th>Status</th>
                     <th>Bukti</th>
                     <th>Aksi</th>
