@@ -25,6 +25,7 @@
                     <th>Jumlah (Kg)</th>
                     <th>Kualitas</th>
                     <th>Status</th>
+                    <th>Bukti</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -42,6 +43,15 @@
                         </span>
                     </td>
                     <td>
+                        @if($item->bukti_foto)
+                            <a href="{{ route('packager.penerimaan-beras.bukti', $item) }}" target="_blank" class="btn-outline-custom btn-sm d-inline-flex align-items-center gap-1" style="font-size:0.75rem; padding: 4px 8px;">
+                                <span class="iconify" data-icon="heroicons:photo" style="width:14px;height:14px;"></span> Lihat
+                            </a>
+                        @else
+                            <span class="text-muted" style="font-size:0.75rem;">-</span>
+                        @endif
+                    </td>
+                    <td>
                         <div class="d-flex gap-2">
                             <a href="{{ route('packager.penerimaan-beras.edit', $item) }}" class="btn-outline-custom btn-sm">
                                 <span class="iconify" data-icon="heroicons:pencil" style="width:14px;height:14px;"></span>
@@ -51,7 +61,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="text-center py-5 text-muted">
+                    <td colspan="8" class="text-center py-5 text-muted">
                         <span class="iconify" data-icon="heroicons:inbox-stack" style="width:40px;height:40px;opacity:0.3;" class="mb-2"></span>
                         <p>Belum ada data penerimaan beras.</p>
                     </td>
