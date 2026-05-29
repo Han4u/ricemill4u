@@ -16,7 +16,7 @@
     <div class="col-lg-5">
         <div class="card">
             @if($lahan->foto)
-                <img src="{{ Storage::url($lahan->foto) }}"
+                <img src="{{ route('petani.lahan.bukti', $lahan) }}?t={{ $lahan->updated_at->timestamp }}"
                      style="width:100%;height:220px;object-fit:cover;border-radius:14px 14px 0 0;">
             @else
                 <div style="width:100%;height:160px;background:#e8f5ee;border-radius:14px 14px 0 0;

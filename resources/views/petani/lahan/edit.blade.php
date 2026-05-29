@@ -77,8 +77,10 @@
                     <label class="form-label-custom">Foto Lahan</label>
                     @if($lahan->foto)
                         <div style="margin-bottom:12px;">
-                            <img src="{{ Storage::url($lahan->foto) }}"
-                                 style="width:120px;height:80px;border-radius:10px;object-fit:cover;">
+                            <a href="{{ route('petani.lahan.bukti', $lahan) }}?t={{ $lahan->updated_at->timestamp }}" target="_blank">
+                                <img src="{{ route('petani.lahan.bukti', $lahan) }}?t={{ $lahan->updated_at->timestamp }}"
+                                     style="width:120px;height:80px;border-radius:10px;object-fit:cover;">
+                            </a>
                             <span style="font-size:.8rem;color:var(--text-muted);margin-left:8px;">Foto saat ini</span>
                         </div>
                     @endif

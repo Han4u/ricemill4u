@@ -56,7 +56,10 @@ class ProfilLahanController extends Controller
         $validated['user_id'] = Auth::id();
 
         if ($request->hasFile('foto')) {
-            $validated['foto'] = $request->file('foto')->store('lahan', 'public');
+            $file = $request->file('foto');
+            $mimeType = $file->getMimeType();
+            $base64 = base64_encode(file_get_contents($file->getRealPath()));
+            $validated['foto'] = 'data:' . $mimeType . ';base64,' . $base64;
         }
 
         ProfilLahan::create($validated);
@@ -92,10 +95,13 @@ class ProfilLahanController extends Controller
         ]);
 
         if ($request->hasFile('foto')) {
-            if ($lahan->foto) {
+            if ($lahan->foto && strpos($lahan->foto, 'data:') !== 0) {
                 Storage::disk('public')->delete($lahan->foto);
             }
-            $validated['foto'] = $request->file('foto')->store('lahan', 'public');
+            $file = $request->file('foto');
+            $mimeType = $file->getMimeType();
+            $base64 = base64_encode(file_get_contents($file->getRealPath()));
+            $validated['foto'] = 'data:' . $mimeType . ';base64,' . $base64;
         }
 
         $lahan->update($validated);
@@ -108,7 +114,7 @@ class ProfilLahanController extends Controller
     {
         $this->authorizeOwner($lahan);
 
-        if ($lahan->foto) {
+        if ($lahan->foto && strpos($lahan->foto, 'data:') !== 0) {
             Storage::disk('public')->delete($lahan->foto);
         }
 
@@ -120,5 +126,34 @@ class ProfilLahanController extends Controller
     private function authorizeOwner(ProfilLahan $lahan): void
     {
         abort_if($lahan->user_id !== Auth::id(), 403, 'Akses ditolak.');
+    }
+
+    public function showBukti($id)
+    {
+        $lahan = ProfilLahan::findOrFail($id);
+        abort_if($lahan->user_id !== Auth::id(), 403);
+
+        if (!$lahan->foto) {
+            abort(404);
+        }
+
+        if (str_starts_with($lahan->foto, 'data:')) {
+            list($type, $data) = explode(';', $lahan->foto);
+            list(, $data)      = explode(',', $data);
+            $mime = str_replace('data:', '', $type);
+            return response(base64_decode($data))
+                ->header('Content-Type', $mime)
+                ->header('Cache-Control', 'public, max-age=86400');
+        }
+
+        $disk = Storage::disk('public');
+        if ($disk->exists($lahan->foto)) {
+            return response()->file($disk->path($lahan->foto), [
+                'Content-Type' => $disk->mimeType($lahan->foto) ?: 'application/octet-stream',
+                'Cache-Control' => 'public, max-age=86400',
+            ]);
+        }
+
+        abort(404);
     }
 }

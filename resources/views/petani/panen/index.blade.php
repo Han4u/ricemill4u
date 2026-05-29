@@ -112,8 +112,8 @@
                     </td>
                     <td>
                         @if($panen->bukti_foto)
-                            <a href="{{ Storage::url($panen->bukti_foto) }}" target="_blank">
-                                <img src="{{ Storage::url($panen->bukti_foto) }}"
+                            <a href="{{ route('petani.panen.bukti', $panen) }}?t={{ $panen->updated_at->timestamp }}" target="_blank">
+                                <img src="{{ route('petani.panen.bukti', $panen) }}?t={{ $panen->updated_at->timestamp }}"
                                      style="width:36px;height:36px;border-radius:8px;object-fit:cover;">
                             </a>
                         @else

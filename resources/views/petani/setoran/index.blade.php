@@ -37,6 +37,7 @@
                     <th>Hasil Bersih</th>
                     <th>Pendapatan</th>
                     <th>Status</th>
+                    <th>Nota</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -75,6 +76,15 @@
                         <span class="badge-custom {{ $badge }}">{{ ucfirst($setoran->status) }}</span>
                     </td>
                     <td>
+                        @if($setoran->bukti_nota)
+                            <a href="{{ route('petani.setoran.bukti', $setoran) }}?t={{ $setoran->updated_at->timestamp }}" target="_blank" class="btn-outline-custom btn-sm d-inline-flex align-items-center gap-1" style="font-size:0.75rem; padding: 4px 8px;">
+                                <span class="iconify" data-icon="heroicons:photo" style="width:14px;height:14px;"></span> Lihat
+                            </a>
+                        @else
+                            <span class="text-muted" style="font-size:0.75rem;">-</span>
+                        @endif
+                    </td>
+                    <td>
                         <div class="d-flex gap-2">
                             <a href="{{ route('petani.setoran.edit', $setoran) }}"
                                class="btn-outline-custom" style="padding:6px 10px;">
@@ -93,7 +103,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" style="text-align:center;padding:48px;color:var(--text-muted);">
+                    <td colspan="8" style="text-align:center;padding:48px;color:var(--text-muted);">
                         <span class="iconify" data-icon="heroicons:archive-box" style="width:40px;height:40px;margin-bottom:12px;display:block;margin-inline:auto;"></span>
                         Belum ada data setoran.<br>
                         <a href="{{ route('petani.setoran.create') }}" style="color:var(--primary);font-weight:500;">

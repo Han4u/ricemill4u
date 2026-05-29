@@ -177,8 +177,11 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 // ── Petani Routes ──────────────────────────────────────────────────────────
 Route::middleware(['auth', 'role:petani'])->prefix('petani')->name('petani.')->group(function () {
     Route::get('/dashboard', [PetaniDashboard::class, 'index'])->name('dashboard');
+    Route::get('lahan/{id}/bukti', [ProfilLahanController::class, 'showBukti'])->name('lahan.bukti');
     Route::resource('lahan',   ProfilLahanController::class);
+    Route::get('panen/{id}/bukti', [RiwayatPanenController::class, 'showBukti'])->name('panen.bukti');
     Route::resource('panen',   RiwayatPanenController::class);
+    Route::get('setoran/{id}/bukti', [SetoranController::class, 'showBukti'])->name('setoran.bukti');
     Route::resource('setoran', SetoranController::class)->except(['show']);
 });
 
@@ -186,6 +189,7 @@ Route::middleware(['auth', 'role:petani'])->prefix('petani')->name('petani.')->g
 Route::middleware(['auth', 'role:rice_mill'])->prefix('ricemill')->name('ricemill.')->group(function () {
     Route::get('/dashboard', [RiceMillDashboard::class, 'index'])->name('dashboard');
 
+    Route::get('penerimaan-gabah/{id}/bukti', [PenerimaanGabahController::class, 'showBukti'])->name('penerimaan-gabah.bukti');
     Route::resource('penerimaan-gabah', PenerimaanGabahController::class);
     Route::resource('operasional',      OperasionalController::class);
     Route::resource('produksi',         ProduksiController::class)->except(['edit', 'update']);

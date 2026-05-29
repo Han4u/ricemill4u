@@ -88,9 +88,30 @@
                     <td>{{ $item->jenis_produk }} ({{ $item->jumlah }} Pcs)</td>
                     <td class="fw-bold">Rp {{ number_format($item->total_harga, 0, ',', '.') }}</td>
                     <td>
-                        <span class="badge-custom {{ $item->status == 'selesai' ? 'badge-success-custom' : ($item->status == 'dibatalkan' ? 'badge-danger-custom' : 'badge-warning-custom') }}">
-                            {{ ucfirst($item->status) }}
-                        </span>
+                        <form action="{{ route('packager.pesanan.update', $item) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('PUT')
+                            <select name="status" onchange="this.form.submit()" class="form-select form-select-sm border-0 fw-semibold text-center" 
+                                    style="width: 130px; font-size: 0.78rem; padding: 4px 10px; border-radius: 50px; cursor: pointer;
+                                           background-position: right 8px center;
+                                           @if($item->status == 'selesai')
+                                               background-color: rgba(22, 163, 74, 0.1); color: #16a34a;
+                                           @elseif($item->status == 'dibatalkan')
+                                               background-color: rgba(220, 38, 38, 0.1); color: #dc2626;
+                                           @elseif($item->status == 'menunggu')
+                                               background-color: rgba(234, 179, 8, 0.1); color: #ca8a04;
+                                           @elseif($item->status == 'diproses')
+                                               background-color: rgba(59, 130, 246, 0.1); color: #3b82f6;
+                                           @elseif($item->status == 'dikirim')
+                                               background-color: rgba(147, 51, 234, 0.1); color: #9333ea;
+                                           @endif">
+                                <option value="menunggu" {{ $item->status == 'menunggu' ? 'selected' : '' }}>Menunggu</option>
+                                <option value="diproses" {{ $item->status == 'diproses' ? 'selected' : '' }}>Diproses</option>
+                                <option value="dikirim" {{ $item->status == 'dikirim' ? 'selected' : '' }}>Dikirim</option>
+                                <option value="selesai" {{ $item->status == 'selesai' ? 'selected' : '' }}>Selesai</option>
+                                <option value="dibatalkan" {{ $item->status == 'dibatalkan' ? 'selected' : '' }}>Dibatalkan</option>
+                            </select>
+                        </form>
                     </td>
                     <td>
                         <form action="{{ route('packager.pesanan.destroy', $item) }}" method="POST" onsubmit="return confirm('Hapus data ini?')">

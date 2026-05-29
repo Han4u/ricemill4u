@@ -48,7 +48,10 @@ class PenerimaanGabahController extends Controller
         $validated['user_id'] = Auth::id();
 
         if ($request->hasFile('bukti_foto')) {
-            $validated['bukti_foto'] = $request->file('bukti_foto')->store('penerimaan', 'public');
+            $file = $request->file('bukti_foto');
+            $mimeType = $file->getMimeType();
+            $base64 = base64_encode(file_get_contents($file->getRealPath()));
+            $validated['bukti_foto'] = 'data:' . $mimeType . ';base64,' . $base64;
         }
 
         PenerimaanGabah::create($validated);
@@ -85,10 +88,13 @@ class PenerimaanGabahController extends Controller
         ]);
 
         if ($request->hasFile('bukti_foto')) {
-            if ($penerimaanGabah->bukti_foto) {
+            if ($penerimaanGabah->bukti_foto && strpos($penerimaanGabah->bukti_foto, 'data:') !== 0) {
                 Storage::disk('public')->delete($penerimaanGabah->bukti_foto);
             }
-            $validated['bukti_foto'] = $request->file('bukti_foto')->store('penerimaan', 'public');
+            $file = $request->file('bukti_foto');
+            $mimeType = $file->getMimeType();
+            $base64 = base64_encode(file_get_contents($file->getRealPath()));
+            $validated['bukti_foto'] = 'data:' . $mimeType . ';base64,' . $base64;
         }
 
         $penerimaanGabah->update($validated);
@@ -101,7 +107,7 @@ class PenerimaanGabahController extends Controller
     {
         abort_if($penerimaanGabah->user_id !== Auth::id(), 403);
 
-        if ($penerimaanGabah->bukti_foto) {
+        if ($penerimaanGabah->bukti_foto && strpos($penerimaanGabah->bukti_foto, 'data:') !== 0) {
             Storage::disk('public')->delete($penerimaanGabah->bukti_foto);
         }
 
@@ -109,5 +115,34 @@ class PenerimaanGabahController extends Controller
 
         return redirect()->route('ricemill.penerimaan-gabah.index')
             ->with('success', 'Data penerimaan berhasil dihapus!');
+    }
+
+    public function showBukti($id)
+    {
+        $penerimaan = PenerimaanGabah::findOrFail($id);
+        abort_if($penerimaan->user_id !== Auth::id(), 403);
+
+        if (!$penerimaan->bukti_foto) {
+            abort(404);
+        }
+
+        if (str_starts_with($penerimaan->bukti_foto, 'data:')) {
+            list($type, $data) = explode(';', $penerimaan->bukti_foto);
+            list(, $data)      = explode(',', $data);
+            $mime = str_replace('data:', '', $type);
+            return response(base64_decode($data))
+                ->header('Content-Type', $mime)
+                ->header('Cache-Control', 'public, max-age=86400');
+        }
+
+        $disk = Storage::disk('public');
+        if ($disk->exists($penerimaan->bukti_foto)) {
+            return response()->file($disk->path($penerimaan->bukti_foto), [
+                'Content-Type' => $disk->mimeType($penerimaan->bukti_foto) ?: 'application/octet-stream',
+                'Cache-Control' => 'public, max-age=86400',
+            ]);
+        }
+
+        abort(404);
     }
 }

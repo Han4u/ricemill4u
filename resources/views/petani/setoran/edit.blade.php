@@ -78,8 +78,10 @@
                     <label class="form-label-custom">Ganti Bukti Nota (opsional)</label>
                     @if($setoran->bukti_nota)
                         <div style="margin-bottom:10px;">
-                            <img src="{{ Storage::url($setoran->bukti_nota) }}"
-                                 style="height:80px;border-radius:10px;object-fit:cover;">
+                            <a href="{{ route('petani.setoran.bukti', $setoran) }}?t={{ $setoran->updated_at->timestamp }}" target="_blank">
+                                <img src="{{ route('petani.setoran.bukti', $setoran) }}?t={{ $setoran->updated_at->timestamp }}"
+                                     style="height:80px;border-radius:10px;object-fit:cover;">
+                            </a>
                             <div style="font-size:.78rem;color:var(--text-muted);margin-top:4px;">Nota saat ini</div>
                         </div>
                     @endif

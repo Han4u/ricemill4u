@@ -75,8 +75,8 @@
                     @if($panen->bukti_foto)
                     <div class="col-12" style="margin-top:8px;">
                         <div style="font-size:.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Bukti Foto</div>
-                        <a href="{{ asset('storage/' . $panen->bukti_foto) }}" target="_blank">
-                            <img src="{{ asset('storage/' . $panen->bukti_foto) }}"
+                        <a href="{{ route('petani.panen.bukti', $panen) }}?t={{ $panen->updated_at->timestamp }}" target="_blank">
+                            <img src="{{ route('petani.panen.bukti', $panen) }}?t={{ $panen->updated_at->timestamp }}"
                                  style="max-width:300px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.08);">
                         </a>
                     </div>

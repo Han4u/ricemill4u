@@ -43,7 +43,10 @@ class SetoranController extends Controller
         $validated['user_id'] = Auth::id();
 
         if ($request->hasFile('bukti_nota')) {
-            $validated['bukti_nota'] = $request->file('bukti_nota')->store('setoran', 'public');
+            $file = $request->file('bukti_nota');
+            $mimeType = $file->getMimeType();
+            $base64 = base64_encode(file_get_contents($file->getRealPath()));
+            $validated['bukti_nota'] = 'data:' . $mimeType . ';base64,' . $base64;
         }
 
         SetoranPenggilingan::create($validated);
@@ -76,10 +79,13 @@ class SetoranController extends Controller
         ]);
 
         if ($request->hasFile('bukti_nota')) {
-            if ($setoran->bukti_nota) {
+            if ($setoran->bukti_nota && strpos($setoran->bukti_nota, 'data:') !== 0) {
                 Storage::disk('public')->delete($setoran->bukti_nota);
             }
-            $validated['bukti_nota'] = $request->file('bukti_nota')->store('setoran', 'public');
+            $file = $request->file('bukti_nota');
+            $mimeType = $file->getMimeType();
+            $base64 = base64_encode(file_get_contents($file->getRealPath()));
+            $validated['bukti_nota'] = 'data:' . $mimeType . ';base64,' . $base64;
         }
 
         $setoran->update($validated);
@@ -92,7 +98,7 @@ class SetoranController extends Controller
     {
         abort_if($setoran->user_id !== Auth::id(), 403);
 
-        if ($setoran->bukti_nota) {
+        if ($setoran->bukti_nota && strpos($setoran->bukti_nota, 'data:') !== 0) {
             Storage::disk('public')->delete($setoran->bukti_nota);
         }
 
@@ -100,5 +106,34 @@ class SetoranController extends Controller
 
         return redirect()->route('petani.setoran.index')
             ->with('success', 'Data setoran berhasil dihapus!');
+    }
+
+    public function showBukti($id)
+    {
+        $setoran = SetoranPenggilingan::findOrFail($id);
+        abort_if($setoran->user_id !== Auth::id(), 403);
+
+        if (!$setoran->bukti_nota) {
+            abort(404);
+        }
+
+        if (str_starts_with($setoran->bukti_nota, 'data:')) {
+            list($type, $data) = explode(';', $setoran->bukti_nota);
+            list(, $data)      = explode(',', $data);
+            $mime = str_replace('data:', '', $type);
+            return response(base64_decode($data))
+                ->header('Content-Type', $mime)
+                ->header('Cache-Control', 'public, max-age=86400');
+        }
+
+        $disk = Storage::disk('public');
+        if ($disk->exists($setoran->bukti_nota)) {
+            return response()->file($disk->path($setoran->bukti_nota), [
+                'Content-Type' => $disk->mimeType($setoran->bukti_nota) ?: 'application/octet-stream',
+                'Cache-Control' => 'public, max-age=86400',
+            ]);
+        }
+
+        abort(404);
     }
 }

@@ -99,8 +99,10 @@
                     <label class="form-label-custom">Upload Foto Baru (opsional)</label>
                     @if($panen->bukti_foto)
                         <div style="margin-bottom:10px;">
-                            <img src="{{ Storage::url($panen->bukti_foto) }}"
-                                 style="height:80px;border-radius:10px;object-fit:cover;">
+                            <a href="{{ route('petani.panen.bukti', $panen) }}?t={{ $panen->updated_at->timestamp }}" target="_blank">
+                                <img src="{{ route('petani.panen.bukti', $panen) }}?t={{ $panen->updated_at->timestamp }}"
+                                     style="height:80px;border-radius:10px;object-fit:cover;">
+                            </a>
                             <div style="font-size:.78rem;color:var(--text-muted);margin-top:4px;">Foto saat ini</div>
                         </div>
                     @endif

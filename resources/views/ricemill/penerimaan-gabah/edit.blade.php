@@ -64,7 +64,9 @@
                         @if($penerimaan->bukti_foto)
                             <div class="mt-2">
                                 <small class="text-muted">Foto saat ini:</small><br>
-                                <img src="{{ Storage::url($penerimaan->bukti_foto) }}" style="width:100px;border-radius:8px;">
+                                <a href="{{ route('ricemill.penerimaan-gabah.bukti', $penerimaan) }}?t={{ $penerimaan->updated_at->timestamp }}" target="_blank">
+                                    <img src="{{ route('ricemill.penerimaan-gabah.bukti', $penerimaan) }}?t={{ $penerimaan->updated_at->timestamp }}" style="max-height:100px;border-radius:8px;object-fit:cover;">
+                                </a>
                             </div>
                         @endif
                     </div>

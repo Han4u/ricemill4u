@@ -71,7 +71,7 @@
                     <td>
                         <div class="d-flex align-items-center gap-3">
                             @if($lahan->foto)
-                                <img src="{{ Storage::url($lahan->foto) }}"
+                                <img src="{{ route('petani.lahan.bukti', $lahan) }}?t={{ $lahan->updated_at->timestamp }}"
                                      style="width:40px;height:40px;border-radius:10px;object-fit:cover;">
                             @else
                                 <div style="width:40px;height:40px;border-radius:10px;

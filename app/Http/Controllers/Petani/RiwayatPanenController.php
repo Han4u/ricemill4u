@@ -58,7 +58,10 @@ class RiwayatPanenController extends Controller
         $validated['user_id'] = Auth::id();
 
         if ($request->hasFile('bukti_foto')) {
-            $validated['bukti_foto'] = $request->file('bukti_foto')->store('panen', 'public');
+            $file = $request->file('bukti_foto');
+            $mimeType = $file->getMimeType();
+            $base64 = base64_encode(file_get_contents($file->getRealPath()));
+            $validated['bukti_foto'] = 'data:' . $mimeType . ';base64,' . $base64;
         }
 
         $lahan = ProfilLahan::findOrFail($validated['profil_lahan_id']);
@@ -100,10 +103,13 @@ class RiwayatPanenController extends Controller
         ]);
 
         if ($request->hasFile('bukti_foto')) {
-            if ($panen->bukti_foto) {
+            if ($panen->bukti_foto && strpos($panen->bukti_foto, 'data:') !== 0) {
                 Storage::disk('public')->delete($panen->bukti_foto);
             }
-            $validated['bukti_foto'] = $request->file('bukti_foto')->store('panen', 'public');
+            $file = $request->file('bukti_foto');
+            $mimeType = $file->getMimeType();
+            $base64 = base64_encode(file_get_contents($file->getRealPath()));
+            $validated['bukti_foto'] = 'data:' . $mimeType . ';base64,' . $base64;
         }
 
         $panen->update($validated);
@@ -116,7 +122,7 @@ class RiwayatPanenController extends Controller
     {
         abort_if($panen->user_id !== Auth::id(), 403);
 
-        if ($panen->bukti_foto) {
+        if ($panen->bukti_foto && strpos($panen->bukti_foto, 'data:') !== 0) {
             Storage::disk('public')->delete($panen->bukti_foto);
         }
 
@@ -124,5 +130,34 @@ class RiwayatPanenController extends Controller
 
         return redirect()->route('petani.panen.index')
             ->with('success', 'Data panen berhasil dihapus!');
+    }
+
+    public function showBukti($id)
+    {
+        $panen = RiwayatPanen::findOrFail($id);
+        abort_if($panen->user_id !== Auth::id(), 403);
+
+        if (!$panen->bukti_foto) {
+            abort(404);
+        }
+
+        if (str_starts_with($panen->bukti_foto, 'data:')) {
+            list($type, $data) = explode(';', $panen->bukti_foto);
+            list(, $data)      = explode(',', $data);
+            $mime = str_replace('data:', '', $type);
+            return response(base64_decode($data))
+                ->header('Content-Type', $mime)
+                ->header('Cache-Control', 'public, max-age=86400');
+        }
+
+        $disk = Storage::disk('public');
+        if ($disk->exists($panen->bukti_foto)) {
+            return response()->file($disk->path($panen->bukti_foto), [
+                'Content-Type' => $disk->mimeType($panen->bukti_foto) ?: 'application/octet-stream',
+                'Cache-Control' => 'public, max-age=86400',
+            ]);
+        }
+
+        abort(404);
     }
 }
