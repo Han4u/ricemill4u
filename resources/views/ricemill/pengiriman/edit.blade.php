@@ -71,8 +71,8 @@
                             @if($pengiriman->bukti_kirim)
                                 <div class="mt-2">
                                     <span class="text-muted d-block mb-1" style="font-size:0.8rem;">Bukti Kirim Saat Ini:</span>
-                                    <a href="{{ asset('storage/' . $pengiriman->bukti_kirim) }}" target="_blank">
-                                        <img src="{{ asset('storage/' . $pengiriman->bukti_kirim) }}" alt="Bukti Kirim" class="img-thumbnail" style="max-height:100px; object-fit:cover;">
+                                    <a href="{{ route('ricemill.pengiriman.bukti', $pengiriman) }}" target="_blank">
+                                        <img src="{{ route('ricemill.pengiriman.bukti', $pengiriman) }}" alt="Bukti Kirim" class="img-thumbnail" style="max-height:100px; object-fit:cover;">
                                     </a>
                                 </div>
                             @endif

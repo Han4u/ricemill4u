@@ -189,6 +189,7 @@ Route::middleware(['auth', 'role:rice_mill'])->prefix('ricemill')->name('ricemil
     Route::resource('penerimaan-gabah', PenerimaanGabahController::class);
     Route::resource('operasional',      OperasionalController::class);
     Route::resource('produksi',         ProduksiController::class)->except(['edit', 'update']);
+    Route::get('pengiriman/{id}/bukti', [PengirimanController::class, 'showBukti'])->name('pengiriman.bukti');
     Route::resource('pengiriman',       PengirimanController::class);
     Route::resource('keuangan',         KeuanganController::class)->except(['show', 'edit', 'update']);
 });

@@ -44,7 +44,10 @@ class PengirimanController extends Controller
         $validated['user_id'] = Auth::id();
 
         if ($request->hasFile('bukti_kirim')) {
-            $validated['bukti_kirim'] = $request->file('bukti_kirim')->store('pengiriman', 'public');
+            $file = $request->file('bukti_kirim');
+            $mimeType = $file->getMimeType();
+            $base64 = base64_encode(file_get_contents($file->getRealPath()));
+            $validated['bukti_kirim'] = 'data:' . $mimeType . ';base64,' . $base64;
         }
 
         PengirimanBeras::create($validated);
@@ -76,10 +79,13 @@ class PengirimanController extends Controller
         ]);
 
         if ($request->hasFile('bukti_kirim')) {
-            if ($pengiriman->bukti_kirim) {
+            if ($pengiriman->bukti_kirim && strpos($pengiriman->bukti_kirim, 'data:') !== 0) {
                 Storage::disk('public')->delete($pengiriman->bukti_kirim);
             }
-            $validated['bukti_kirim'] = $request->file('bukti_kirim')->store('pengiriman', 'public');
+            $file = $request->file('bukti_kirim');
+            $mimeType = $file->getMimeType();
+            $base64 = base64_encode(file_get_contents($file->getRealPath()));
+            $validated['bukti_kirim'] = 'data:' . $mimeType . ';base64,' . $base64;
         }
 
         $pengiriman->update($validated);
@@ -97,5 +103,36 @@ class PengirimanController extends Controller
         $pengiriman->delete();
         return redirect()->route('ricemill.pengiriman.index')
             ->with('success', 'Data pengiriman berhasil dihapus!');
+    }
+
+    public function showBukti($id)
+    {
+        $pengiriman = PengirimanBeras::findOrFail($id);
+        abort_if($pengiriman->user_id !== Auth::id(), 403);
+
+        if (!$pengiriman->bukti_kirim) {
+            abort(404);
+        }
+
+        if (str_starts_with($pengiriman->bukti_kirim, 'data:')) {
+            // Parse base64 URL
+            list($type, $data) = explode(';', $pengiriman->bukti_kirim);
+            list(, $data)      = explode(',', $data);
+            $mime = str_replace('data:', '', $type);
+            return response(base64_decode($data))
+                ->header('Content-Type', $mime)
+                ->header('Cache-Control', 'public, max-age=86400');
+        }
+
+        // Fallback for file path
+        $disk = Storage::disk('public');
+        if ($disk->exists($pengiriman->bukti_kirim)) {
+            return response()->file($disk->path($pengiriman->bukti_kirim), [
+                'Content-Type' => $disk->mimeType($pengiriman->bukti_kirim) ?: 'application/octet-stream',
+                'Cache-Control' => 'public, max-age=86400',
+            ]);
+        }
+
+        abort(404);
     }
 }
