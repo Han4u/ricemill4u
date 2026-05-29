@@ -29,13 +29,18 @@ Route::get('/run-migrations', function () {
         // Check if database connection works
         \Illuminate\Support\Facades\DB::connection()->getPdo();
         
+        if (request()->has('fresh')) {
+            \Illuminate\Support\Facades\Artisan::call('db:wipe', ['--force' => true]);
+            $output .= "Database wiped successfully!\n\n";
+        }
+        
         $params = ['--force' => true];
         if (request()->has('seed')) {
             $params['--seed'] = true;
         }
         
         \Illuminate\Support\Facades\Artisan::call('migrate', $params);
-        $output = \Illuminate\Support\Facades\Artisan::output();
+        $output .= \Illuminate\Support\Facades\Artisan::output();
         
         $status = 'success';
         $message = 'Database migrations completed successfully!';
