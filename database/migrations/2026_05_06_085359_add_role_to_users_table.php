@@ -8,10 +8,11 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Hapus komentar Claude, paksa Laravel menambahkan kolom role
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('role')->default('petani')->after('email');
-        });
+        if (!Schema::hasColumn('users', 'role')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->string('role')->default('petani');
+            });
+        }
     }
 
     public function down(): void

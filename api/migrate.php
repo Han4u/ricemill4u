@@ -1,52 +1,63 @@
 <?php
 /**
- * Standalone SQLite migration for Vercel serverless.
+ * Standalone PostgreSQL migration for Vercel serverless.
  * Creates all tables using raw PDO - no Laravel bootstrap needed.
  */
 
-$dbPath = $_ENV['DB_DATABASE'] ?? '/tmp/database.sqlite';
-if (!file_exists($dbPath)) {
-    @touch($dbPath);
-}
+$host = $_ENV['DB_HOST'] ?? 'aws-1-us-east-1.pooler.supabase.com';
+$port = $_ENV['DB_PORT'] ?? '6543';
+$dbname = $_ENV['DB_DATABASE'] ?? 'postgres';
+$user = $_ENV['DB_USERNAME'] ?? 'postgres.irdtskvrgeqwghthkxat';
+$pass = $_ENV['DB_PASSWORD'] ?? '';
 
-$pdo = new PDO('sqlite:' . $dbPath);
+$dsn = "pgsql:host={$host};port={$port};dbname={$dbname};sslmode=require";
+$pdo = new PDO($dsn, $user, $pass);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$pdo->exec('PRAGMA journal_mode=WAL');
-$pdo->exec('PRAGMA foreign_keys=ON');
+
+// Check if migrations table exists and has entries
+try {
+    $check = $pdo->query("SELECT COUNT(*) FROM migrations");
+    $count = $check->fetchColumn();
+    if ($count > 0) {
+        return; // Migrations already ran
+    }
+} catch (PDOException $e) {
+    // Table doesn't exist, proceed with migration
+}
 
 // ── migrations table ──
 $pdo->exec("CREATE TABLE IF NOT EXISTS migrations (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id SERIAL PRIMARY KEY,
     migration VARCHAR(255) NOT NULL,
     batch INTEGER NOT NULL
 )");
 
 // ── users ──
 $pdo->exec("CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     role VARCHAR(50) NOT NULL DEFAULT 'petani',
-    email_verified_at DATETIME NULL,
+    email_verified_at TIMESTAMP NULL,
     password VARCHAR(255) NOT NULL,
     phone VARCHAR(255) NULL,
     address VARCHAR(255) NULL,
     remember_token VARCHAR(100) NULL,
-    created_at DATETIME NULL,
-    updated_at DATETIME NULL
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
 )");
 
 // ── password_reset_tokens ──
 $pdo->exec("CREATE TABLE IF NOT EXISTS password_reset_tokens (
     email VARCHAR(255) PRIMARY KEY,
     token VARCHAR(255) NOT NULL,
-    created_at DATETIME NULL
+    created_at TIMESTAMP NULL
 )");
 
 // ── sessions ──
 $pdo->exec("CREATE TABLE IF NOT EXISTS sessions (
     id VARCHAR(255) PRIMARY KEY,
-    user_id INTEGER NULL,
+    user_id BIGINT NULL,
     ip_address VARCHAR(45) NULL,
     user_agent TEXT NULL,
     payload TEXT NOT NULL,
@@ -59,24 +70,26 @@ $pdo->exec("CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions(user_id)
 $pdo->exec("CREATE TABLE IF NOT EXISTS cache (
     key VARCHAR(255) PRIMARY KEY,
     value TEXT NOT NULL,
-    expiration INTEGER NOT NULL
+    expiration BIGINT NOT NULL
 )");
 $pdo->exec("CREATE TABLE IF NOT EXISTS cache_locks (
     key VARCHAR(255) PRIMARY KEY,
     owner VARCHAR(255) NOT NULL,
-    expiration INTEGER NOT NULL
+    expiration BIGINT NOT NULL
 )");
 
 // ── jobs, job_batches, failed_jobs ──
 $pdo->exec("CREATE TABLE IF NOT EXISTS jobs (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id BIGSERIAL PRIMARY KEY,
     queue VARCHAR(255) NOT NULL,
     payload TEXT NOT NULL,
-    attempts INTEGER NOT NULL,
+    attempts SMALLINT NOT NULL,
     reserved_at INTEGER NULL,
     available_at INTEGER NOT NULL,
     created_at INTEGER NOT NULL
 )");
+$pdo->exec("CREATE INDEX IF NOT EXISTS idx_jobs_queue ON jobs(queue)");
+
 $pdo->exec("CREATE TABLE IF NOT EXISTS job_batches (
     id VARCHAR(255) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -89,37 +102,37 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS job_batches (
     created_at INTEGER NOT NULL,
     finished_at INTEGER NULL
 )");
+
 $pdo->exec("CREATE TABLE IF NOT EXISTS failed_jobs (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id BIGSERIAL PRIMARY KEY,
     uuid VARCHAR(255) NOT NULL UNIQUE,
     connection TEXT NOT NULL,
     queue TEXT NOT NULL,
     payload TEXT NOT NULL,
     exception TEXT NOT NULL,
-    failed_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    failed_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 )");
 
 // ── profil_lahans ──
 $pdo->exec("CREATE TABLE IF NOT EXISTS profil_lahans (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     nama_lahan VARCHAR(255) NOT NULL,
     lokasi VARCHAR(255) NOT NULL,
     luas_lahan DECIMAL(10,2) NOT NULL,
     jenis_tanah VARCHAR(50) NOT NULL DEFAULT 'tanah_liat',
     deskripsi TEXT NULL,
     foto VARCHAR(255) NULL,
-    is_active INTEGER NOT NULL DEFAULT 1,
-    created_at DATETIME NULL,
-    updated_at DATETIME NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    is_active BOOLEAN NOT NULL DEFAULT true,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
 )");
 
 // ── riwayat_panens ──
 $pdo->exec("CREATE TABLE IF NOT EXISTS riwayat_panens (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
-    profil_lahan_id INTEGER NOT NULL,
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    profil_lahan_id BIGINT NOT NULL REFERENCES profil_lahans(id) ON DELETE CASCADE,
     tanggal_panen DATE NOT NULL,
     jenis_tanaman VARCHAR(255) NOT NULL,
     jumlah_hasil DECIMAL(10,2) NOT NULL,
@@ -128,16 +141,14 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS riwayat_panens (
     total_pendapatan DECIMAL(15,2) NULL,
     catatan TEXT NULL,
     bukti_foto VARCHAR(255) NULL,
-    created_at DATETIME NULL,
-    updated_at DATETIME NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (profil_lahan_id) REFERENCES profil_lahans(id) ON DELETE CASCADE
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
 )");
 
 // ── setoran_penggilingan ──
 $pdo->exec("CREATE TABLE IF NOT EXISTS setoran_penggilingan (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     tanggal_setoran DATE NOT NULL,
     jenis_hasil_panen VARCHAR(255) NOT NULL,
     jumlah_setoran DECIMAL(10,2) NOT NULL,
@@ -147,15 +158,14 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS setoran_penggilingan (
     bukti_nota VARCHAR(255) NULL,
     catatan TEXT NULL,
     status VARCHAR(50) NOT NULL DEFAULT 'pending',
-    created_at DATETIME NULL,
-    updated_at DATETIME NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
 )");
 
 // ── penerimaan_gabah ──
 $pdo->exec("CREATE TABLE IF NOT EXISTS penerimaan_gabah (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     nama_petani VARCHAR(255) NOT NULL,
     asal_lahan VARCHAR(255) NULL,
     tanggal DATE NOT NULL,
@@ -164,49 +174,44 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS penerimaan_gabah (
     status VARCHAR(50) NOT NULL DEFAULT 'menunggu',
     bukti_foto VARCHAR(255) NULL,
     catatan TEXT NULL,
-    created_at DATETIME NULL,
-    updated_at DATETIME NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
 )");
 
 // ── operasional_penggilingan ──
 $pdo->exec("CREATE TABLE IF NOT EXISTS operasional_penggilingan (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
-    penerimaan_gabah_id INTEGER NULL,
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    penerimaan_gabah_id BIGINT NULL REFERENCES penerimaan_gabah(id) ON DELETE SET NULL,
     batch_id VARCHAR(255) NOT NULL UNIQUE,
     tanggal_proses DATE NOT NULL,
     jumlah_gabah_masuk DECIMAL(10,2) NOT NULL,
     status VARCHAR(50) NOT NULL DEFAULT 'menunggu',
     catatan TEXT NULL,
-    created_at DATETIME NULL,
-    updated_at DATETIME NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (penerimaan_gabah_id) REFERENCES penerimaan_gabah(id) ON DELETE SET NULL
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
 )");
 
-// ── riwayat_produksi (includes jenis_beras column) ──
+// ── riwayat_produksi ──
 $pdo->exec("CREATE TABLE IF NOT EXISTS riwayat_produksi (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
-    operasional_id INTEGER NULL,
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    operasional_id BIGINT NULL REFERENCES operasional_penggilingan(id) ON DELETE SET NULL,
     batch_id VARCHAR(255) NOT NULL,
     tanggal_proses DATE NOT NULL,
     jumlah_gabah DECIMAL(10,2) NOT NULL,
     jumlah_beras DECIMAL(10,2) NOT NULL,
     jenis_beras VARCHAR(255) NULL,
-    notifikasi_rendemen_rendah INTEGER NOT NULL DEFAULT 0,
+    notifikasi_rendemen_rendah BOOLEAN NOT NULL DEFAULT false,
     catatan TEXT NULL,
-    created_at DATETIME NULL,
-    updated_at DATETIME NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (operasional_id) REFERENCES operasional_penggilingan(id) ON DELETE SET NULL
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
 )");
 
-// ── pengiriman_beras (with flexible jenis_beras & status) ──
+// ── pengiriman_beras ──
 $pdo->exec("CREATE TABLE IF NOT EXISTS pengiriman_beras (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     nama_packager VARCHAR(255) NOT NULL,
     jenis_beras VARCHAR(100) NOT NULL DEFAULT 'medium',
     jumlah_karung INTEGER NOT NULL,
@@ -216,31 +221,29 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS pengiriman_beras (
     status VARCHAR(50) NOT NULL DEFAULT 'menunggu',
     bukti_kirim VARCHAR(255) NULL,
     catatan TEXT NULL,
-    created_at DATETIME NULL,
-    updated_at DATETIME NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
 )");
 
-// ── keuangan_ricemill (with VARCHAR kategori) ──
+// ── keuangan_ricemill ──
 $pdo->exec("CREATE TABLE IF NOT EXISTS keuangan_ricemill (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     tipe VARCHAR(50) NOT NULL,
     keterangan VARCHAR(255) NOT NULL,
     jumlah DECIMAL(15,2) NOT NULL,
     kategori VARCHAR(100) NOT NULL DEFAULT 'lainnya',
     tanggal DATE NOT NULL,
     catatan TEXT NULL,
-    created_at DATETIME NULL,
-    updated_at DATETIME NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
 )");
 
-// ── penerimaan_beras (with flexible jenis_beras) ──
+// ── penerimaan_beras ──
 $pdo->exec("CREATE TABLE IF NOT EXISTS penerimaan_beras (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
-    pengiriman_beras_id INTEGER NULL,
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    pengiriman_beras_id BIGINT NULL REFERENCES pengiriman_beras(id) ON DELETE SET NULL,
     asal_penggilingan VARCHAR(255) NOT NULL,
     jenis_beras VARCHAR(100) NOT NULL DEFAULT 'medium',
     jumlah_beras DECIMAL(10,2) NOT NULL,
@@ -248,33 +251,29 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS penerimaan_beras (
     status VARCHAR(50) NOT NULL DEFAULT 'menunggu',
     bukti_foto VARCHAR(255) NULL,
     catatan TEXT NULL,
-    created_at DATETIME NULL,
-    updated_at DATETIME NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (pengiriman_beras_id) REFERENCES pengiriman_beras(id) ON DELETE SET NULL
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
 )");
 
-// ── hasil_pengemasan (with expanded enums) ──
+// ── hasil_pengemasan ──
 $pdo->exec("CREATE TABLE IF NOT EXISTS hasil_pengemasan (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
-    penerimaan_beras_id INTEGER NULL,
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    penerimaan_beras_id BIGINT NULL REFERENCES penerimaan_beras(id) ON DELETE SET NULL,
     tanggal DATE NOT NULL,
     jenis_beras VARCHAR(100) NOT NULL DEFAULT 'medium',
     jenis_kemasan VARCHAR(50) NOT NULL DEFAULT '5kg',
     jumlah_kemasan INTEGER NOT NULL,
     kualitas VARCHAR(50) NOT NULL DEFAULT 'layak_jual',
     catatan TEXT NULL,
-    created_at DATETIME NULL,
-    updated_at DATETIME NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (penerimaan_beras_id) REFERENCES penerimaan_beras(id) ON DELETE SET NULL
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
 )");
 
-// ── pesanan (with VARCHAR jenis_produk) ──
+// ── pesanan ──
 $pdo->exec("CREATE TABLE IF NOT EXISTS pesanan (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     nama_pelanggan VARCHAR(255) NOT NULL,
     tanggal DATE NOT NULL,
     jenis_produk VARCHAR(100) NOT NULL,
@@ -283,9 +282,8 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS pesanan (
     total_harga DECIMAL(15,2) NULL,
     status VARCHAR(50) NOT NULL DEFAULT 'menunggu',
     catatan TEXT NULL,
-    created_at DATETIME NULL,
-    updated_at DATETIME NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
 )");
 
 // ── Record all migrations as done ──
