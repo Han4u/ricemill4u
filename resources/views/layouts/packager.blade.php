@@ -711,6 +711,33 @@
                 body.classList.remove('sidebar-collapsed');
             }
         });
+
+        // Global File Size Validation (Max 2MB)
+        document.body.addEventListener('change', function(e) {
+            // Cegah infinite loop bila event dipicu secara manual (isTrusted false)
+            if (!e.isTrusted) return;
+            
+            if (e.target && e.target.matches('input[type="file"]')) {
+                const input = e.target;
+                if (input.files && input.files[0]) {
+                    if (input.files[0].size > 2 * 1024 * 1024) { // 2MB
+                        // Langsung kosongkan field agar tidak terlihat terisi
+                        input.value = '';
+                        
+                        // Memicu event change secara manual agar UI text/custom reset
+                        input.dispatchEvent(new Event('change', { bubbles: true }));
+                        
+                        Swal.fire({
+                            title: 'Ukuran File Terlalu Besar!',
+                            text: 'Maksimal ukuran file gambar yang diperbolehkan adalah 2MB.',
+                            icon: 'error',
+                            confirmButtonColor: '#1a5c38',
+                            confirmButtonText: 'Mengerti'
+                        });
+                    }
+                }
+            }
+        });
     });
 
     function confirmLogout() {
